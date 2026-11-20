@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{amsmath,subcaption,graphicx,cleveref}
+\begin{document}
+\section{Intro}\label{sec:intro}
+See \cref{fig:pair,fig:a}, \eqref{eq:tagged}, \eqref{eq:plain}, Figure~\ref{fig:early} and \cref{sec:intro}.
+\begin{figure}\centering
+\begin{subfigure}{0.4\textwidth}\label{fig:a}\rule{1cm}{1cm}\caption{Left.}\end{subfigure}
+\begin{subfigure}{0.4\textwidth}\rule{1cm}{1cm}\caption{Right.}\label{fig:b}\end{subfigure}
+\caption{A pair.\label{fig:pair}}
+\end{figure}
+\begin{figure*}\centering\label{fig:early}\rule{1cm}{1cm}\caption{Label before caption in a figure*.}\end{figure*}
+\begin{align*}
+a &= b \tag{T1}\label{eq:tagged}
+\end{align*}
+\begin{align}
+c &= d \nonumber\\
+e &= f \label{eq:plain}
+\end{align}
+\section*{Proof of Theorem 1}
+A proof in an unnumbered section.
+\subsection{Details}\label{sec:details}
+Back to \cref{sec:details} and to Section~\ref{sec:intro}.
+\end{document}

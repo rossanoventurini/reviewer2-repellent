@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+% Draft rewritten with ChatGPT, prompt: make the intro more formal
+\begin{document}
+\section*{Introduction}
+Wombat indexes are **very fast** on every invented benchmark we tried.
+The function `wombat_search` returns the top results.
+## Results
+See [our repository](https://example.org/wombat) for the code.
+- first point of the list
+- second point of the list
+
+Recall reaches 0.9 at k ≤ 10, and the cost grows as $n \times d$ while we write 4 × 4 here.
+Our method — unlike the baseline — keeps the order; other papers---for example the invented one---do not.
+He called it "the best" index of the year.
+Search​terms are matched exactly, and 10 ms is the latency.
+% an LLM rewrote this paragraph
+\section*{Things that must not be reported}
+The \section* heading above and $a * b$ and $x \le y$ in math are fine, as is `quoted text' in LaTeX style.
+We also write ``double quotes'' and the authors' own---unspaced---dashes, and 5--10 ranges.
+\begin{itemize}
+\item - a dash inside an item
+\end{itemize}
+\begin{verbatim}
+**not markdown** in verbatim `code`
+# not a heading
+\end{verbatim}
+\begin{tabular}{ll}
+- & 0.5 \\
+- & 0.6 \\
+\end{tabular}
+\verb|**x**| and \texttt{a\_b} are code.
+\end{document}

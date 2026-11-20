@@ -1,0 +1,37 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Burrow and Digger(2020)]
+  {wombat2020}
+Ada Burrow and Ben Digger.
+\newblock Fast wombat search.
+\newblock In \emph{Proceedings of the 3rd Wombat Conference ({WOMCON})}, pages
+  1--10, 2020.
+\newblock \doi{10.9999/wombat_2020.1}.
+
+\bibitem[{Hopper(2019{\natexlab{a}})}]{quokka2019}
+Cara Hopper.
+\newblock Quokka graphs for nearest neighbors.
+\newblock \emph{Journal of Marsupial Computing}, 3(2):5--20, 2019.
+
+\bibitem[{Termite(2018)}]{numbat2018}
+Dan Termite.
+\newblock Numbat Indexes for Sparse Vectors.
+\newblock Technical report, Outback Institute, 2018.
+\newblock \url{https://example.org/numbat_index/report-2018.pdf}.
+
+\bibitem[{Spine(2021)}]{echidna2021}
+Eve Spine.
+\newblock Echidna: a spiky benchmark.
+\newblock \emph{Transactions on Invented Benchmarks}, 1:1--9, 2021.
+
+\bibitem[{Tunnel(2024)}]{burrow2024}
+Fay Tunnel.
+\newblock Burrow: deeper wombat search.
+\newblock In \emph{Proceedings of the 4th Wombat Conference ({WOMCON})}, 2024.
+
+\end{thebibliography}

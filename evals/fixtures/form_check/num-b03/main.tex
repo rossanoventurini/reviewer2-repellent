@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{booktabs,amsmath}
+\begin{document}
+\begin{abstract}
+Our method reaches 92.3\% accuracy on T1 and an average of 90.0 across the four tasks.
+\end{abstract}
+\section{Results}
+\begin{table}[h]\centering\caption{Accuracy (\%), mean $\pm$ std over 5 seeds. Bold: best.}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & T1 & T2 & T3 & T4 & Avg \\
+\midrule
+Base & 90.1 $\pm$ 0.3 & 80.2 $\pm$ 0.5 & 70.3 $\pm$ 0.2 & 60.4 $\pm$ 0.4 & 75.3 \\
+Other & 91.0 \textsubscript{0.3} & 81.0 \textsubscript{0.4} & 71.0 \textsubscript{0.2} & 61.0 \textsubscript{0.4} & 76.0 \\
+Ours & \textbf{92.3} ± 0.4 & \textbf{85.0} ± 0.6 & \textbf{72.0} ± 0.3 & \textbf{63.0} ± 0.5 & 80.0 \\
+Worse & 92.9$_{\pm 0.4}$ & 70.0$_{\pm 0.6}$ & 60.0$_{\pm 0.3}$ & 50.0$_{\pm 0.5}$ & 68.2 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

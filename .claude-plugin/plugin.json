@@ -1,0 +1,18 @@
+{
+  "name": "reviewer2-repellent",
+  "description": "Finds the objective errors reviewers pounce on in a LaTeX paper before submission (venue rules, numbers and claims, typos, references, bibliography, layout), writes a numbered report and applies the fixes to a copy, with an annotated PDF of every change.",
+  "version": "0.1.0",
+  "icon": "./.claude-plugin/icon.png",
+  "author": {
+    "name": "Rossano Venturini"
+  },
+  "repository": "https://github.com/rossanoventurini/reviewer2-repellent",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "paper",
+    "peer-review",
+    "reviewer-2",
+    "latex"
+  ]
+}

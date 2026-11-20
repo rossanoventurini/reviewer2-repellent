@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{booktabs}
+\newcommand{\win}[1]{\textbf{#1}}
+\begin{document}
+\begin{abstract}
+Our index is 2.3$\times$ faster than the baseline at the same accuracy.
+\end{abstract}
+\section{Results}
+As Table~\ref{tab:acc} shows, our method reaches 92.3 on T1, against 90.1 for the baseline.
+\begin{table}[h]\centering\caption{Accuracy (\%) $\uparrow$. Bold: best.}\label{tab:acc}
+\begin{tabular}{lrr}
+\toprule
+Method & T1 & T2 \\
+\midrule
+Base & 90.1 & 80.0 \\
+Ours & 93.2 & \win{85.0} \\
+Other & \win{89.0} & 84.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Latency (ms) $\downarrow$ and speedup over Base.}\label{tab:lat}
+\begin{tabular}{lrrr}
+\toprule
+Method & Latency (ms) & Memory (GB) & Speedup \\
+\midrule
+Base & 1,000 & 12.3 & 1.0 \\
+Ours & 400 & 92.3 & 2.6 \\
+Other & 700 & 40.0 & 1.4 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

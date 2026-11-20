@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\begin{table}[h]\centering
+\begin{tabular}{lrrr}
+\toprule
+Method & Latency & Speedup & Recall \\
+\midrule
+Baseline & 200 & 1.0$\times$ & 0.90 \\
+Ours & \textbf{100} & 2.0$\times$ & \textbf{0.95} \\
+Other & 80 & 2.5$\times$ & 0.80 \\
+Wrong & 300 & 1.4$\times$ & \bfseries 0.99 \\
+\bottomrule
+\end{tabular}
+\caption{Speedup is Baseline latency divided by the row's latency; 300 gives 0.67, printed 1.4 (wrong).}
+\end{table}
+\begin{table}[h]\centering
+\begin{tabular}{lrr}
+\toprule
+System & QPS & vs.\ FAISS \\
+\midrule
+A & 1000 & 1.6$\times$ \\
+B & 1500 & 2.4$\times$ \\
+\bottomrule
+\end{tabular}
+\caption{Ratios against FAISS (625 QPS), which is not in the table.}
+\end{table}
+\begin{table}[h]\centering
+\begin{tabular}{lrr}
+\toprule
+Config & Time (ms) & Share \\
+\midrule
+Parse & 20 & 20\% \\
+Index & 60 & 60\% \\
+Search & 20 & 20\% \\
+\bottomrule
+\end{tabular}
+\caption{Percentages, no ratio sign.}
+\end{table}
+\begin{table}[h]\centering
+\begin{tabular}{lrr}
+\toprule
+Row & Base (ms) & Ours (ms) \\
+\midrule
+r1 & 10 & 5 (2.0$\times$) \\
+r2 & 10 & 8 (1.5$\times$) \\
+\bottomrule
+\end{tabular}
+\caption{Ratio inside the same cell: 10/8 = 1.25, printed 1.5 (wrong).}
+\end{table}
+\end{document}

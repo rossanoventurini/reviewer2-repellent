@@ -1,0 +1,16 @@
+\documentclass[twocolumn]{article}
+\usepackage{graphicx,booktabs,amsmath}
+\begin{document}
+Intro mentions Figure~\ref{fig:huge} and equation~\eqref{eq:nope} and cites~\cite{nokey}.
+\label{dup}
+\input{sections/a-very-long-directory-name-to-force-the-log-line-wrap-at-seventy-nine-characters/part-one}
+\input{sections/a-very-long-directory-name-to-force-the-log-line-wrap-at-seventy-nine-characters/part-two}
+\label{dup}
+\begin{figure}[h]
+\centering\rule{1pt}{1.3\textheight}
+\caption{Too tall.}\label{fig:huge}
+\end{figure}
+\begin{thebibliography}{1}
+\bibitem{a} A. Author. A paper. 2020.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,13 @@
+{"rules": [
+  {"id": "pages", "rule": "At most 12 pages, references excluded", "quote": "Full papers must not exceed 12 pages",
+   "status": "met", "items": [], "note": "1 page", "source": "VERIFIED", "url": "https://womcon.example.org/cfp"},
+  {"id": "anonymity", "rule": "Anonymous submission, PDF metadata included", "quote": "Submissions must be anonymous",
+   "status": "confirm", "items": [21], "note": "author field emptied in the copy", "source": "VERIFIED",
+   "url": "https://womcon.example.org/cfp"},
+  {"id": "template", "rule": "Standard `article` class", "quote": "Use the standard article class.",
+   "status": "met", "items": [], "note": "article", "source": "ARCHIVED 2026-01-15",
+   "url": "https://web.archive.org/web/20260115000000/https://womcon.example.org/template"},
+  {"id": "data", "rule": "Data availability statement", "quote": "A data availability statement is required.",
+   "status": "unknown", "items": [], "note": "no such section; the rule could not be verified", "source": "UNKNOWN"}
+ ],
+ "blocked": [{"url": "https://womcon.example.org/template", "note": "HTTP 403"}]}

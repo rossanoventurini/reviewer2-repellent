@@ -1,0 +1,1 @@
+Wanted: CHECK same row/column: full/ours / d2 / qps 2,500 vs 2,600 only. Traps: "Setting" spans the two label columns (header stack of label columns); 3-span body cell; \multicolumn{1}{c}{\textbf{65.0}} must still count as a bold value (65.0 is the best of its set: no CHECK); "Full" as a group label is also BOUND_RX "full" -> must not be treated as a bound row.

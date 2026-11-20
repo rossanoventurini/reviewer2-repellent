@@ -1,0 +1,11 @@
+\section{Introduction}
+\label{sec:intro}
+
+Wombat search is a old problem. Many system solve it with graphs, e.g. the
+burrow graph~\cite{wombat2020,quokka2019}, and we follow the same approach. Our index uses $k$ neighbours
+per node and reaches $95\%$ recall with $2.3\times$ less memory.
+
+The library is written in Rust\footnote{The code is at a public repository and
+the version used is 1.2.} and ships with three encoder.
+We measure throughput in queries per second (QPS) and memory in GiB.
+Burrows are scanned in parallel.

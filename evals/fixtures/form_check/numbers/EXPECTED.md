@@ -1,0 +1,1 @@
+# numbers: digit swap (2,414 vs 2,144), unit mix in one sentence (640 ms with values of a µs table), the same row and column in two tables with different values (Ours/99: 1,250 vs 1,205), an abstract number in no table (3.7×), a row against the trend (Other), the speedup 1.6× = 2,144/1,250 (no finding).

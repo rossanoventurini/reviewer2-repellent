@@ -1,0 +1,25 @@
+\documentclass{article}\usepackage{booktabs,multirow}\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Two label columns under one spanning header; a body row with a 3-span.}\label{tab:a}
+\begin{tabular}{llrrrr}
+\toprule
+\multicolumn{2}{c}{Setting} & \multicolumn{2}{c}{D1} & \multicolumn{2}{c}{D2} \\
+\cmidrule(lr){1-2}\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Data & Method & R@10 & QPS & R@10 & QPS \\
+\midrule
+\multirow{2}{*}{Full} & Base & 80.1 & 1,000 & 70.5 & 2,000 \\
+ & Ours & 85.2 & 1,500 & 75.0 & 2,500 \\
+\multirow{2}{*}{Small} & Base & 60.0 & \multicolumn{3}{c}{out of memory} \\
+ & Ours & \multicolumn{1}{c}{\textbf{65.0}} & 1,800 & 66.0 & 2,900 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{D2 on the Full data; Ours QPS 2,600 is a real inconsistency with 2,500.}\label{tab:b}
+\begin{tabular}{lrr}
+\toprule
+Method & R@10 & QPS \\
+\midrule
+Base & 70.5 & 2,000 \\
+Ours & 75.0 & 2,600 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

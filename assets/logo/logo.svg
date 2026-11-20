@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="140 194 182 228" width="364" height="456">
+<title>reviewer2-repellent</title>
+<defs><clipPath id="label"><rect x="146" y="200" width="170" height="216" rx="6"/></clipPath></defs>
+<rect x="146" y="200" width="170" height="216" rx="6" fill="#fdfbf4" stroke="#0b3a26" stroke-width="2.5"/>
+<g clip-path="url(#label)">
+<rect x="146" y="200" width="170" height="34" fill="#d2232a"/>
+<text x="231" y="223" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="17" fill="#fff" letter-spacing="2">REVIEWER 2</text>
+<text x="231" y="256" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="22" fill="#16181d" letter-spacing="1">REPELLENT</text>
+<g transform="translate(234 318) scale(1.25)" fill="none" stroke="#16181d" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="18" cy="-4" rx="20" ry="6" transform="rotate(-18 18 -4)" fill="#16181d" stroke="none"/><circle cx="-6" cy="2" r="9" fill="#16181d" stroke="none"/><circle cx="-17" cy="3" r="6" fill="#16181d" stroke="none"/><path d="M-22 6 L-40 16" stroke-width="2.5"/><path d="M-2 -6 C6 -30 26 -34 36 -30 C30 -20 14 -12 0 -4" stroke-width="2" fill="#ffffff" fill-opacity="0.6"/><path d="M-8 9 L-18 22 L-24 34" stroke-width="2.2"/><path d="M-4 10 L-4 24 L-10 36" stroke-width="2.2"/><path d="M0 9 L12 22 L14 34" stroke-width="2.2"/></g>
+<circle cx="231" cy="314" r="46" fill="none" stroke="#d2232a" stroke-width="8"/>
+<path d="M199 282 L263 346" stroke="#d2232a" stroke-width="8" stroke-linecap="round"/>
+<text x="231" y="384" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-style="italic" font-size="12" fill="#16181d">Spray before you submit</text>
+<text x="231" y="404" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="8.5" fill="#555">Lasts one review cycle</text>
+</g>
+<rect x="146" y="200" width="170" height="216" rx="6" fill="none" stroke="#0b3a26" stroke-width="2.5"/>
+</svg>

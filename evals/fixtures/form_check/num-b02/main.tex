@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Metrics as rows, methods as columns. Bold: best per metric (row).}
+\begin{tabular}{lrrrr}
+\toprule
+Metric & A & B & C & D \\
+\midrule
+Recall@1 (\%) & 10.0 & 20.0 & 30.0 & \textbf{40.0} \\
+Recall@10 (\%) & 30.0 & 40.0 & \textbf{60.0} & 59.0 \\
+Recall@100 (\%) & 60.0 & 70.0 & 75.0 & \textbf{80.0} \\
+Latency (ms) & \textbf{1.5} & 2.0 & 3.0 & 4.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

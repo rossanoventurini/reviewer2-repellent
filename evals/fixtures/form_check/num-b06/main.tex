@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Accuracy (\%) with model size. Avg is the mean of T1--T3. Two groups, each with its own Average row.}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Params (M) & T1 & T2 & T3 & Avg \\
+\midrule
+Base & 110 & 70.0 & 80.0 & 60.0 & 70.0 \\
+Other & 340 & 71.0 & 81.0 & 61.0 & 71.0 \\
+Average & 225 & 70.5 & 80.5 & 60.5 & 70.5 \\
+\midrule
+Ours-S & 110 & 75.0 & 85.0 & 65.0 & 75.0 \\
+Ours-L & 340 & 77.0 & 87.0 & 67.0 & 77.0 \\
+Average & 225 & 76.0 & 86.0 & 66.0 & 76.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Speedups; the last column is the geometric mean over the three benchmarks.}
+\begin{tabular}{lrrrr}
+\toprule
+Method & B1 & B2 & B3 & Mean \\
+\midrule
+A & 1.0 & 4.0 & 16.0 & 4.0 \\
+B & 2.0 & 2.0 & 2.0 & 2.0 \\
+C & 1.0 & 1.0 & 64.0 & 4.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

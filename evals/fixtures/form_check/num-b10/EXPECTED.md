@@ -1,0 +1,3 @@
+# b10-cited-table
+- True errors: (1) the sentence cites tab:acc and says 92.3, but tab:acc has 93.2 (92.3 only appears in tab:lat as a memory value) -> wanted CHECK "number in a sentence citing Table X is not in Table X"; (2) abstract "2.3×" vs the table's 2.6× (1000/400) -> wanted INFO/CHECK, but 2.3 ≈ 92.3/40.0 (a chance ratio of two memory cells) so it is silently dropped; (3) tab:lat Speedup column: 1.4 vs 1000/700 = 1.43 ok, 2.6 vs 2.5 wrong -> wanted CHECK, but no × symbol in the cells so check_tables never looks; (4) bold \win{89.0} is on the worst value of a ↑ column -> wanted CHECK, missed because \win is a user macro and because direction is ignored (89.0 is the min, accepted as an extreme).
+- Expected script output today: no CHECK at all.

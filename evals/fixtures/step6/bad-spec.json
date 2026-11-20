@@ -1,0 +1,13 @@
+[
+ {"item": 1, "file": "sections/intro.tex", "kind": "fix", "old": "is", "new": "was"},
+ {"item": 2, "file": "sections/intro.tex", "kind": "fix", "old": "zebra", "new": "x"},
+ {"item": 3, "file": "sections/intro.tex", "kind": "fix", "old": "graphs", "new": "trees", "ctx": "Many system solve"},
+ {"item": 4, "file": "sections/intro.tex", "kind": "check", "old": "a old", "new": "an old"},
+ {"item": 5, "file": "sections/intro.tex", "kind": "fix", "old": "burrow graph", "new": "\\emph{burrow graph"},
+ {"item": 6, "file": "sections/intro.tex", "kind": "fix", "old": "three encoder", "new": "three encoders"},
+ {"item": 7, "file": "sections/intro.tex", "kind": "fix", "old": "with three", "new": "with four"},
+ {"item": 8, "file": "sections/intro.tex", "kind": "fix", "old": "in GiB", "new": "in 50% GiB"},
+ {"item": 9, "file": "sections/results.tex", "kind": "fix", "old": "1100}", "new": "1101}", "ctx": "\\frac{1200}{1100}"},
+ {"item": 10, "file": "nope.tex", "kind": "fix", "old": "a", "new": "b"},
+ {"item": 11, "file": "sections/results.tex", "kind": "fix", "old": "1.10", "new": "1.09"}
+]

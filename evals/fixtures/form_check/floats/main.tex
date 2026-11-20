@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{graphicx,lipsum}
+\begin{document}
+\section{Intro}
+Figures~\ref{f1} and~\ref{f2} show the setup; Tables~\ref{t1} and~\ref{t2} list the sizes. Figure~\ref{f3} is deferred.
+\begin{figure}[t]\centering\rule{\textwidth}{0.8\textheight}\caption{One.}\label{f1}\end{figure}
+\begin{figure}[t]\centering\rule{\textwidth}{0.8\textheight}\caption{Two.}\label{f2}\end{figure}
+\begin{figure}[t]\centering\rule{\textwidth}{0.8\textheight}\caption{Three.}\label{f3}\end{figure}
+\begin{table}[h]\centering\begin{tabular}{lr}a&1\\\end{tabular}\caption{Sizes A.}\label{t1}\end{table}
+\begin{table}[h]\centering\begin{tabular}{lr}b&2\\\end{tabular}\caption{Sizes B.}\label{t2}\end{table}
+\lipsum[1-4]
+\begin{thebibliography}{1}
+\bibitem{a} A. Author. A paper. 2020.
+\end{thebibliography}
+\appendix
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\setcounter{figure}{0}
+\section{Extra plots}
+Figure~\ref{fa} is an appendix figure, mentioned only here.
+\begin{figure}[h]\centering\rule{3cm}{1cm}\caption{Appendix figure.}\label{fa}\end{figure}
+\end{document}

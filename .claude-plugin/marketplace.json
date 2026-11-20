@@ -1,0 +1,17 @@
+{
+  "name": "reviewer2-repellent",
+  "owner": {
+    "name": "Rossano Venturini"
+  },
+  "metadata": {
+    "description": "Spray before you submit: keeps Reviewer 2 away from your paper.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "reviewer2-repellent",
+      "description": "Finds the objective errors reviewers pounce on in a LaTeX paper before submission (venue rules, numbers and claims, typos, references, bibliography, layout), writes a numbered report and applies the fixes to a copy, with an annotated PDF of every change.",
+      "source": "./"
+    }
+  ]
+}

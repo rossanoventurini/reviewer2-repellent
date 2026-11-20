@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\section{Results}
+Table~\ref{tab:a} and Table~\ref{tab:b} report the same runs.
+\begin{table}[h]\centering\caption{Two datasets, two metrics each.}\label{tab:a}
+\begin{tabular}{lrrrr}
+\toprule
+ & \multicolumn{2}{c}{D1} & \multicolumn{2}{c}{D2} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & R@10 & QPS & R@10 & QPS \\
+\midrule
+Base & 80.1 & 1,000 & 70.5 & 2,000 \\
+Ours & 85.2 & 1,500 & 75.0 & 2,500 \\
+Third & 82.0 & \multicolumn{2}{c}{OOM} & 2,100 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{D2 only (QPS of Ours should be 2,500; here 2,600 is a real error).}\label{tab:b}
+\begin{tabular}{lrr}
+\toprule
+Method & R@10 & QPS \\
+\midrule
+Base & 70.5 & 2,000 \\
+Ours & 75.0 & 2,600 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

@@ -1,0 +1,1 @@
+Units are in every cell (bad style, but not missing). Wanted: at most the style note "units in the header, not in every cell"; not CHECK "unit missing in an efficiency column". Trap: check_units_missing looks only at header and caption -> two false CHECKs. Also the text's "92.3" style match: the cells parse with unit 's'/'GB' (Cell.unit) so col_units could use them.

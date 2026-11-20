@@ -1,0 +1,15 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\section{Response time}
+Under heavy load the 99th percentile remains under that of the reference system: 1,742 versus 3,065\,$\mu$s. Under light load, caching cuts the median from 187 to 132\,$\mu$s yet lifts the 99th percentile from 263 to 415\,ms.
+\begin{table}[h]\centering\caption{Response time ($\mu$s).}
+\begin{tabular}{lrr}
+\toprule
+System & p99 light load & p99 heavy load \\
+\midrule
+Ours & 415 & 1,742 \\
+Reference & 529 & 3,065 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

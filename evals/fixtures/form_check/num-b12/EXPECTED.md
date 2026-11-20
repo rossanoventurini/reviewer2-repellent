@@ -1,0 +1,11 @@
+# b12-uncovered (categories of the research with no script support)
+- F: "consistently outperforms all baselines on every dataset" but Ours is best in 2 of 3 columns (D2: 81.0 < 82.0) and is slower -> wanted CHECK "quantifier claim vs win count 2/3" (research §6 candidate list).
+- Rule 3: Ours 91.0 beats "Oracle (upper bound)" 90.0 on D1 -> wanted INFO "row beats a bound row".
+- K: header "Time" without unit, caption without unit -> wanted CHECK.
+- C/N: dagger-marked copied baselines -> wanted INFO "imported numbers".
+- Rule 7: ablation "Full model" 90.5 vs main "Ours" 91.0 on D1 -> wanted CHECK/INFO equivalence pair.
+- Rule 8: "w/o A" 91.5 > full 90.5 -> wanted INFO "removing A improves the score".
+- Rule 1: Recall row over k=1,2,4,8 is non-monotone (85 -> 83), Time dips at k=8 -> wanted INFO monotone series (check_trends needs 3 rows, here 2: silent).
+- H/rule 14: N = 30 queries, a 1.2-point gain is < one item (3.3 points) -> wanted INFO "N=30; one item = 3.3 points".
+- A: no ± and no seeds -> INFO "no variance" fires (ok), but the margin per column (1.0 on D1) is not listed.
+- Expected script output today: INFO no variance only.

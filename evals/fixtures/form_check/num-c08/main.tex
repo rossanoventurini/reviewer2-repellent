@@ -1,0 +1,26 @@
+\documentclass{article}\usepackage{booktabs,multirow}\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Main results on MS MARCO and NQ.}\label{tab:main}
+\begin{tabular}{llrr}
+\toprule
+Dataset & Method & nDCG@10 & R@100 \\
+\midrule
+\multirow{3}{*}{MS MARCO} & Dense retriever (DPR) & 30.0 & 80.0 \\
+ & Exact search & 40.0 & 95.0 \\
+ & Ours & 41.0 & 94.0 \\
+\midrule
+\multirow{2}{*}{NQ} & Dense retriever (DPR) & 50.0 & 85.0 \\
+ & Ours & 52.0 & 88.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Ablation on MS MARCO.}\label{tab:abl}
+\begin{tabular}{lrr}
+\toprule
+Variant & nDCG@10 & R@100 \\
+\midrule
+Full & 40.5 & 94.0 \\
+w/o pruning & 41.2 & 94.5 \\
+w/o cache & 38.0 & 90.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

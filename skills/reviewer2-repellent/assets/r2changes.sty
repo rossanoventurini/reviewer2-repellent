@@ -1,0 +1,546 @@
+% r2changes.sty -- change marks and margin notes for the annotated copy of a paper (reviewer2-repellent, step 6).
+% Written by scripts/apply_edits.py (marks, notes), scripts/mark_bbl.py (bibliography) and scripts/front_pages.py
+% (cover and decision sheet); scripts/check_notes.py checks the placement from the .aux. Engines: pdfLaTeX (tested),
+% XeLaTeX and LuaLaTeX. Needs LaTeX 2020-10 or later (hooks).
+%
+% Marks (every one carries #n, the number of its item in report.md):
+%   \rrfix{n}{old}{new}             certain fix, applied: new text red, old text struck out
+%   \rrcheck{n}{old}{new}{question} applied, to confirm: new text orange (the question goes in the item's note)
+%   \rrstyle{n}{old}{new}           optional wording: new text purple
+%   \rrmissing{n}{what}             facts only the authors have: an orange [#n: what] placeholder
+%   \rrcheckmark{n}                 an orange #n alone, for a change to confirm that shows no text
+%   \rrfixplain{n}{new}, \rrcheckplain{n}{new}{question}, \rrstyleplain{n}{new}
+%                                   the same without struck text, for math, tables, captions and headings
+%   \rrtag{colour}{n}               the #n tag alone (for hand-written marks)
+% Notes:
+%   \rrnote[file:line]{n}{text}     a light-blue box in the right margin explaining item n; the optional location
+%                                   (in the corrected sources) is printed in small grey type at its bottom right.
+%                                   Not inside floats, captions, footnotes or math: put it in the nearest paragraph
+%                                   (or between paragraphs). It takes no space in the text.
+%   \rrnotepair[file:line]{n}{text}{short}  the same with a short text, printed instead of text when the note is
+%                                   listed in \jobname.rrs (\rrshortnote{k} per line, k = the note's number in the
+%                                   .aux records; build_changes.py writes it for the notes of crowded pages)
+% Links (with hyperref): the #n of a mark links to the box of item n on the same page; the #n of a box links back
+% to the first mark of item n on that page (or to the note's place). \rranchor{n} sets \label{rr-n} and the target
+% rr-n at the first mark or note of item n: \rrpageref{n} prints its page (-- if unknown), \rrlink{n}{text} links
+% to it. The tag commands are disabled in PDF strings (bookmarks).
+%
+% Layout. The page is widened on the right by \rrmarginwidth (7cm) so the boxes fit and the paper's line and page
+% breaks do not change; boxes are at most \rrnotemax (6.6cm) wide. Boxes are not \marginpar's: \rrnote records the
+% page and the height of its line in the .aux (\rr@at{k}{n}{page}{y}), and at shipout every box is drawn on the page
+% of its note, its top at the note's line. Boxes that would collide move down as little as possible, joined to
+% their line by a thin light-blue leader; when a column overflows, the page's boxes are set in a smaller size first,
+% and only then move up from the bottom. A box never leaves its page. Each drawn box writes
+% \rr@placed{k}{note page}{box page}{shift} to the .aux, and a note with a short text \rr@hasshort{k}. Positions
+% come from the previous run: rerun LaTeX until the .aux stops changing (3-4 runs).
+%
+% Front pages: with \usepackage[front]{r2changes} (loads tikz and hyperref): \rrbeginfront, then one
+% \begin{rrfullpage}[id]...\end{rrfullpage} per page (full width, no legend, roman page numbers; the layout is in
+% references/pdf-layout.md), then \rrbeginpaper
+% (the paper starts on a new page numbered 1, with the colour legend at the bottom of its margin). Without front
+% pages the legend is on the first page. \rrcheckbox{name} is a clickable PDF check box and \rranswer{n}{w}{h} a
+% text field "answer-n" for the author's answer (both between \rrbeginform and \rrendform).
+\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+\ProvidesPackage{r2changes}[2026/11/11 reviewer2-repellent change marks]
+\newif\ifrr@frontopt
+\DeclareOption{front}{\rr@frontopttrue}
+\ProcessOptions\relax
+\RequirePackage{xcolor}
+\RequirePackage[normalem]{ulem}
+\ifrr@frontopt
+  \RequirePackage{tikz}\RequirePackage{graphicx}
+  \IfFileExists{animate.sty}{\IfFileExists{zref-abspage.sty}{\IfFileExists{ocgbase.sty}{\IfFileExists{pdfbase.sty}{\RequirePackage{animate}}{}}{}}{}}{}% the strip of the summary plays where JavaScript runs
+  \RequirePackage{hyperref}
+\fi
+\definecolor{rrred}{RGB}{200,0,0}
+\definecolor{rrorange}{RGB}{225,110,0}
+\definecolor{rrpurple}{RGB}{120,40,170}
+\definecolor{rrstrike}{RGB}{110,110,110}
+\definecolor{rrbluebg}{RGB}{225,240,252}
+\definecolor{rrblueframe}{RGB}{110,160,210}
+% ------------------------------------------------------------------ engine
+\ifdefined\pdfsavepos
+  \let\rr@savepos\pdfsavepos \let\rr@lastypos\pdflastypos \let\rr@lastxpos\pdflastxpos
+\else\ifdefined\savepos
+  \let\rr@savepos\savepos \let\rr@lastypos\lastypos \let\rr@lastxpos\lastxpos
+\else
+  \PackageError{r2changes}{No \string\pdfsavepos: use pdfLaTeX, XeLaTeX or LuaLaTeX}{}%
+\fi\fi
+\ifdefined\pdfliteral \def\rr@literal#1{\pdfliteral{#1}}%
+\else\ifdefined\pdfextension \def\rr@literal#1{\pdfextension literal{#1}}%
+\else \def\rr@literal#1{\special{pdf:literal #1}}\fi\fi
+% page counter shared by the .aux records and the shipout layer (1 = first page shipped)
+\newcount\rr@abspage
+\AddToHook{shipout/before}{\global\advance\rr@abspage\@ne}
+\newcommand{\rr@target}[1]{\ifdefined\hypertarget\hypertarget{#1}{}\fi}
+\newcommand{\rr@golink}[2]{\ifdefined\hyperlink\hyperlink{#1}{#2}\else#2\fi}
+\newcommand{\rrlink}[2]{\rr@golink{rr-#1}{#2}}
+\newcommand{\rrpageref}[1]{\ifcsname r@rr-#1\endcsname\ifdefined\hyperlink\pageref*{rr-#1}\else\pageref{rr-#1}\fi\else--\fi}
+% ------------------------------------------------------------------ first anchor of an item
+\DeclareRobustCommand{\rranchor}[1]{%
+  \ifcsname rr@seen@#1\endcsname\else
+    \expandafter\gdef\csname rr@seen@#1\endcsname{}%
+    \rr@target{rr-#1}\label{rr-#1}%
+  \fi}
+% ------------------------------------------------------------------ tags (every mark), linked to their box
+\newcounter{rr@mark}
+\DeclareRobustCommand{\rr@tagged}[2]{% #1 item, #2 printed tag
+  \stepcounter{rr@mark}\edef\rr@m{\the\c@rr@mark}%
+  \rr@target{rrmark-\rr@m}%
+  \edef\rr@w{\write\@auxout{\string\rr@markat{\rr@m}{#1}{\noexpand\the\rr@abspage}}}\rr@w
+  \ifcsname rr@st@#1\endcsname\ifrr@boxes % room for the item's check box, drawn at shipout at this place
+    \rr@savepos\edef\rr@w{\write\@auxout{\string\rr@boxat{#1}{\noexpand\the\rr@abspage}{\noexpand\the\rr@lastxpos}%
+      {\noexpand\the\rr@lastypos}}}\rr@w\kern\dimexpr\rr@cbsize+1pt\relax
+  \fi\fi
+  \ifcsname rr@mpg@\rr@m\endcsname
+    \ifcsname rr@boxfor@#1@\csname rr@mpg@\rr@m\endcsname\endcsname
+      \rr@golink{rrbox-\csname rr@boxfor@#1@\csname rr@mpg@\rr@m\endcsname\endcsname}{#2}%
+    \else #2\fi
+  \else #2\fi}
+\newcommand{\rr@markat}[3]{% mark, item, page (read from the .aux)
+  \expandafter\xdef\csname rr@mpg@#1\endcsname{#3}%
+  \ifcsname rr@firstmark@#2@#3\endcsname\else\expandafter\xdef\csname rr@firstmark@#2@#3\endcsname{#1}\fi}
+\newcommand{\rrtag}[2]{\textsuperscript{\rr@tagged{#2}{\textcolor{#1}{\sffamily\scriptsize\##2}}}}
+\newcommand{\rrold}[1]{\ifx\relax#1\relax\else{\color{rrstrike}\sout{#1}}\fi}
+\newcommand{\rrfix}[3]{\rranchor{#1}\rrold{#2}{\color{rrred}#3}\rrtag{rrred}{#1}}
+\newcommand{\rrcheck}[4]{\rranchor{#1}\rrold{#2}{\color{rrorange}#3}\rrtag{rrorange}{#1}}
+\newcommand{\rrstyle}[3]{\rranchor{#1}\rrold{#2}{\color{rrpurple}#3}\rrtag{rrpurple}{#1}}
+\newcommand{\rrmissing}[2]{\rranchor{#1}{\color{rrorange}\sffamily[\rr@tagged{#1}{\##1}: #2]}}
+\newcommand{\rrcheckmark}[1]{\rranchor{#1}\rrtag{rrorange}{#1}}
+\newcommand{\rrfixplain}[2]{{\color{rrred}#2}\rrtag{rrred}{#1}}
+\newcommand{\rrcheckplain}[3]{{\color{rrorange}#2}\rrtag{rrorange}{#1}}
+\newcommand{\rrstyleplain}[2]{{\color{rrpurple}#2}\rrtag{rrpurple}{#1}}
+% ------------------------------------------------------------------ geometry
+\newlength{\rrmarginwidth}\setlength{\rrmarginwidth}{7cm}
+\newlength{\rrnotemax}\setlength{\rrnotemax}{6.6cm}
+\newlength{\rrtextright}
+\newlength{\rrnotewidth}
+\newlength{\rr@sep}\setlength{\rr@sep}{0.45cm}
+\newcommand{\rr@pdfstrings}{% marks in bookmarks: the new text only
+  \let\rr@tagged\@secondoftwo\let\rranchor\@gobble\let\rrtag\@gobbletwo\let\rrnote\rr@gobblenote\let\rrnotepair\rr@gobblepair
+  \def\rrfix##1##2##3{##3}\def\rrstyle##1##2##3{##3}\def\rrcheck##1##2##3##4{##3}\def\rrcheckmark##1{}%
+  \def\rrfixplain##1##2{##2}\def\rrstyleplain##1##2{##2}\def\rrcheckplain##1##2##3{##2}}
+\newcommand{\rr@gobblenote}[3][]{}
+\newcommand{\rr@gobblepair}[4][]{}
+\AddToHook{begindocument/end}{%
+  \ifdefined\hypersetup\hypersetup{hidelinks}\fi
+  \ifdefined\pdfstringdefDisableCommands\pdfstringdefDisableCommands{\rr@pdfstrings}\fi
+  \addtolength{\paperwidth}{\rrmarginwidth}%
+  \ifdefined\pdfpagewidth\setlength{\pdfpagewidth}{\paperwidth}\fi
+  \ifdefined\pagewidth\setlength{\pagewidth}{\paperwidth}\fi
+  \ifdim\oddsidemargin>\evensidemargin
+    \setlength{\rrtextright}{\dimexpr1in+\hoffset+\oddsidemargin+\textwidth\relax}%
+  \else
+    \setlength{\rrtextright}{\dimexpr1in+\hoffset+\evensidemargin+\textwidth\relax}%
+  \fi
+  \setlength{\rrnotewidth}{\dimexpr\paperwidth-\rrtextright-\rr@sep-0.55cm\relax}%
+  \ifdim\rrnotewidth>\rrnotemax\setlength{\rrnotewidth}{\rrnotemax}\fi
+  \InputIfFileExists{r2states.tex}{}{}%
+  \rrbuildlegend
+  \ifrrfront\else\rrarmlegend\fi
+  \InputIfFileExists{\jobname.rrs}{}{}}
+% ------------------------------------------------------------------ notes
+\newcounter{rr@note}
+\newcommand{\rrnote}[3][]{\rr@mknote{#1}{#2}{#3}{}}
+\newcommand{\rrnotepair}[4][]{\rr@mknote{#1}{#2}{#3}{#4}}
+\newcommand{\rrshortnote}[1]{\expandafter\gdef\csname rr@useshort@#1\endcsname{}}
+\newcommand{\rr@mknote}[4]{\rranchor{#2}%
+  \stepcounter{rr@note}\edef\rr@k{\the\c@rr@note}%
+  \expandafter\gdef\csname rr@item@\rr@k\endcsname{#2}%
+  \expandafter\gdef\csname rr@body@\rr@k\endcsname{#3}%
+  \expandafter\gdef\csname rr@short@\rr@k\endcsname{#4}%
+  \ifx\relax#4\relax\else\edef\rr@w{\write\@auxout{\string\rr@hasshort{\rr@k}}}\rr@w\fi
+  \expandafter\gdef\csname rr@loc@\rr@k\endcsname{#1}%
+  \ifvmode\else\leavevmode\fi % between paragraphs the note stays in the vertical list: no empty paragraph
+  \rr@target{rrnote-\rr@k}\rr@savepos
+  \edef\rr@w{\write\@auxout{\string\rr@at{\rr@k}{#2}{\noexpand\the\rr@abspage}{\noexpand\the\rr@lastypos}}}\rr@w
+  \ifvmode\nobreak\fi}
+\newcommand{\rr@at}[4]{% note, item, page, y (sp from the page bottom) -- read from the .aux
+  \ifcsname rr@pg@#1\endcsname\else
+    \expandafter\xdef\csname rr@pg@#1\endcsname{#3}%
+    \expandafter\xdef\csname rr@y@#1\endcsname{#4}%
+    \ifcsname rr@list@#3\endcsname
+      \expandafter\xdef\csname rr@list@#3\endcsname{\unexpanded\expandafter\expandafter\expandafter
+        {\csname rr@list@#3\endcsname}\noexpand\rr@do{#1}}%
+    \else\expandafter\xdef\csname rr@list@#3\endcsname{\noexpand\rr@do{#1}}\fi
+    \ifcsname rr@boxfor@#2@#3\endcsname\else\expandafter\xdef\csname rr@boxfor@#2@#3\endcsname{#1}\fi
+  \fi}
+\newcommand{\rr@placed}[4]{}
+\newcommand{\rr@hasshort}[1]{}
+\newcommand{\rr@notesize}{\scriptsize}
+\newbox\rr@b
+\newcommand{\rr@setnote}[1]{% typeset note #1 into \rr@b
+  \setbox\rr@b\hbox{\setlength{\fboxsep}{3pt}\fcolorbox{rrblueframe}{rrbluebg}{%
+    \parbox{\dimexpr\rrnotewidth-2\fboxsep-2\fboxrule\relax}{\raggedright\sffamily\rr@notesize
+    \edef\rr@n{\csname rr@item@#1\endcsname}\edef\rr@p{\csname rr@pg@#1\endcsname}%
+    \ifcsname rr@st@\rr@n\endcsname\ifrr@boxes\leavevmode\kern\dimexpr\rr@cbsize+2pt\relax\fi\fi
+    \ifcsname rr@firstmark@\rr@n @\rr@p\endcsname
+      \rr@golink{rrmark-\csname rr@firstmark@\rr@n @\rr@p\endcsname}{\textbf{\#\rr@n}}%
+    \else\rr@golink{rrnote-#1}{\textbf{\#\rr@n}}\fi
+    \ \ifcsname rr@useshort@#1\endcsname
+      \expandafter\ifx\csname rr@short@#1\endcsname\@empty\csname rr@body@#1\endcsname
+      \else\csname rr@short@#1\endcsname\fi
+    \else\csname rr@body@#1\endcsname\fi
+    \let\rr@whyhere\@empty
+    \ifcsname rr@why@\rr@n\endcsname\ifrr@boxes\edef\rr@whyhere{\csname rr@why@\rr@n\endcsname}\fi\fi
+    \ifx\rr@whyhere\@empty\expandafter\ifx\csname rr@loc@#1\endcsname\@empty\else\def\rr@whyhere{ }\fi\fi
+    \ifx\rr@whyhere\@empty\else
+      \par\vspace{1pt}{\fontsize{5.6}{6.6}\selectfont\color{rrstrike}{\itshape\rr@whyhere}\hfill
+      \ttfamily\csname rr@loc@#1\endcsname}\fi}}}}
+\newdimen\rr@cur \newdimen\rr@lim \newdimen\rr@top \newdimen\rr@h \newdimen\rr@gap \newdimen\rr@toplim
+\newdimen\rr@botlim
+\setlength{\rr@gap}{2.5pt}
+\newif\ifrr@over
+% One layout pass at the current size, top to bottom: each box at its line or just below the previous box; tops
+% (from the page bottom) in \rr@t@k. If the last box runs past the bottom, \ifrr@over is set and a bottom-up pass
+% moves boxes up just enough (\rr@drawnotes first retries with smaller sizes).
+\newcommand{\rr@layout}{%
+  \rr@overfalse
+  \rr@cur=\rr@toplim
+  \def\rr@do##1{%
+    \rr@setnote{##1}\rr@h=\dimexpr\ht\rr@b+\dp\rr@b\relax
+    \expandafter\xdef\csname rr@h@##1\endcsname{\the\rr@h}%
+    \rr@top=\dimexpr\csname rr@y@##1\endcsname sp+7.5pt\relax
+    \ifdim\rr@top>\rr@cur \rr@top=\rr@cur\fi
+    \expandafter\xdef\csname rr@t@##1\endcsname{\the\rr@top}%
+    \rr@cur=\dimexpr\rr@top-\rr@h-\rr@gap\relax}%
+  \csname rr@list@\the\rr@abspage\endcsname
+  \ifdim\dimexpr\rr@cur+\rr@gap\relax<\rr@botlim
+    \rr@overtrue
+    \let\rr@rev\@empty
+    \def\rr@do##1{\edef\rr@rev{\noexpand\rr@do{##1}\unexpanded\expandafter{\rr@rev}}}%
+    \csname rr@list@\the\rr@abspage\endcsname
+    \rr@lim=\rr@botlim
+    \def\rr@do##1{%
+      \rr@top=\csname rr@t@##1\endcsname\relax
+      \rr@h=\csname rr@h@##1\endcsname\relax
+      \ifdim\dimexpr\rr@top-\rr@h\relax<\rr@lim \rr@top=\dimexpr\rr@lim+\rr@h\relax\fi
+      \expandafter\xdef\csname rr@t@##1\endcsname{\the\rr@top}%
+      \rr@lim=\dimexpr\rr@top+\rr@gap\relax}%
+    \rr@rev
+  \fi}
+\newcommand{\rr@drawnotes}{%
+  \ifcsname rr@list@\the\rr@abspage\endcsname
+    \rr@toplim=\dimexpr\paperheight-1in-\voffset-\topmargin+4pt\relax
+    \ifrr@legendhere
+      \rr@botlim=\dimexpr1.2cm+\ht\rrlegendbox+\dp\rrlegendbox+6pt\relax
+    \else\rr@botlim=0.9cm\fi
+    \def\rr@notesize{\scriptsize}\rr@layout
+    \ifrr@over\def\rr@notesize{\fontsize{6.3}{7.3}\selectfont}\rr@layout\fi
+    \ifrr@over\def\rr@notesize{\fontsize{5.8}{6.7}\selectfont}\rr@layout\fi
+    \def\rr@do##1{%
+      \rr@setnote{##1}%
+      \rr@top=\csname rr@t@##1\endcsname\relax
+      \rr@h=\dimexpr\csname rr@y@##1\endcsname sp+7.5pt-\rr@top\relax % how far the box moved down
+      \put(\dimexpr\rrtextright+\rr@sep\relax,\dimexpr\rr@top-\paperheight\relax){%
+        \raisebox{-\height}[0pt][0pt]{\rr@target{rrbox-##1}\box\rr@b}}%
+      \edef\rr@n{\csname rr@item@##1\endcsname}%
+      \ifcsname rr@st@\rr@n\endcsname\ifrr@boxes
+        \put(\dimexpr\rrtextright+\rr@sep+3pt+0.4pt\relax,\dimexpr\rr@top-\paperheight-3.4pt-\rr@cbsize\relax){%
+          \rritembox{\rr@n}}\fi\fi
+      \ifdim\rr@h>1.5pt
+        \put(\dimexpr\rrtextright+2pt\relax,\dimexpr\csname rr@y@##1\endcsname sp+2.5pt-\paperheight\relax){%
+          \rr@leader{\dimexpr\rr@sep-2pt\relax}{\dimexpr-\rr@h+1pt\relax}}%
+      \fi
+      \immediate\write\@auxout{\string\rr@placed{##1}{\csname rr@pg@##1\endcsname}{\the\rr@abspage}{\the\rr@h}}}%
+    \csname rr@list@\the\rr@abspage\endcsname
+  \fi}
+% leader: from the text edge at the note's line down to the box top (0.4pt, the frame colour)
+\newcommand{\rr@leader}[2]{\rr@literal{q 0.4 w 0.43 0.63 0.82 RG 0 0 m
+  \strip@pt\dimexpr#1\relax\space\strip@pt\dimexpr#2\relax\space l S Q}}
+\AddToHook{shipout/foreground}{\rr@drawnotes\rr@drawboxes\ifrr@legendhere\rrlegend\global\rr@legendherefalse\fi}
+% ------------------------------------------------------------------ legend
+\newif\ifrr@legendhere
+\newif\ifrrfront
+\newcommand{\rrarmlegend}{\global\rr@legendheretrue}
+\newcommand{\rrlegendtext}{%
+  \textbf{How to read this copy.} Every change carries \textbf{\#n}, its item in report.md.\par
+  \textcolor{rrred}{\textbf{Red}}: error fixed (old text \textcolor{rrstrike}{\sout{struck out}}).\par
+  \textcolor{rrorange}{\textbf{Orange}}: fix applied, to confirm; \textcolor{rrorange}{[\#n: \dots]} needs facts
+  only the authors have.\par
+  \textcolor{rrpurple}{\textbf{Purple}}: optional wording.\par
+  \colorbox{rrbluebg}{\textbf{\#n}} Margin notes explain each item and ask the questions; click \#n to jump between
+  a change and its note.\ifrr@boxes\par
+  \rrboxsym{1}\,= will be applied, \rrboxsym{0}\,= will not: click to change, then save the PDF;
+  \rrboxsym{2}\,= waits for your facts (cannot be ticked).\fi}
+\newsavebox{\rrlegendbox}
+\newcommand{\rrbuildlegend}{%
+  \sbox{\rrlegendbox}{\setlength{\fboxsep}{4pt}\fcolorbox{rrblueframe}{white}{%
+    \parbox[b]{\dimexpr\rrnotewidth-2\fboxsep-2\fboxrule\relax}{\raggedright\sffamily\scriptsize\rrlegendtext}}}}
+\newcommand{\rrlegend}{%
+  \put(\dimexpr\rrtextright+\rr@sep\relax,\dimexpr-\paperheight+1.2cm\relax){\usebox{\rrlegendbox}}}
+% ------------------------------------------------------------------ front pages
+\newcommand{\rrfrontpages}{\rrfronttrue}
+\ifrr@frontopt\rrfronttrue\fi
+\newcommand{\rrbeginfront}{\clearpage\pagenumbering{roman}}
+\newcommand{\rrbeginpaper}{\clearpage\pagenumbering{arabic}\rrarmlegend
+  \edef\rr@w{\write\@auxout{\string\rr@paperstart{\noexpand\the\rr@abspage}}}\rr@w}
+\newcommand{\rr@paperstart}[1]{}% the absolute page (1 = first page shipped) where the paper starts (read by front_pages.py)
+\newsavebox{\rr@fullbox}
+\newlength{\rrfullwidth}
+\newlength{\rrfullheight}
+% rrfullpage[id]: one front page, full width. The content is set at its natural height (the fill, written to the log
+% as "rrfront fill: id=<id> page=<p> natural=<pt> full=<pt>"), then, when it fits, stretched to the full height:
+% only glue with fil stretch (\rrFgap) grows, so the slack goes between sections, not to the bottom.
+\newcommand{\rrFgap}[2][1]{\par\vskip #2 plus #1fil\relax}% \rrFgap[share of the slack]{natural space}
+\newenvironment{rrfullpage}[1][page]{\clearpage\thispagestyle{empty}%
+  \def\rr@fullid{#1}%
+  \setlength{\rrfullwidth}{\dimexpr\paperwidth-68bp\relax}%
+  \setlength{\rrfullheight}{\dimexpr\paperheight-64bp\relax}%
+  \setbox\rr@fullbox\vtop\bgroup\color@begingroup\hsize\rrfullwidth\linewidth\hsize\columnwidth\hsize
+    \@totalleftmargin\z@\@parboxrestore\setlength{\parindent}{0pt}\@minipagetrue}{%
+  \par\kern\z@\color@endgroup\egroup % (the kern: a page ending in a deep line, e.g. top-aligned minipages, keeps it)
+  \@tempdimb=\dimexpr\ht\rr@fullbox+\dp\rr@fullbox\relax
+  \typeout{rrfront fill: id=\rr@fullid\space page=\thepage\space natural=\the\@tempdimb\space full=\the\rrfullheight}%
+  \ifdim\@tempdimb>\rrfullheight
+    \PackageWarningNoLine{r2changes}{Front page too tall (page \thepage): its content overflows the page}%
+  \else
+    \begingroup\vbadness\@M\global\setbox\rr@fullbox\vtop to\rrfullheight{\unvbox\rr@fullbox}\endgroup
+  \fi
+  \@tempdima=\oddsidemargin
+  \if@twoside\ifodd\value{page}\else\@tempdima=\evensidemargin\fi\fi
+  \noindent\begin{picture}(0,0)\put(\dimexpr-1in-\hoffset-\@tempdima+34bp\relax,
+    \dimexpr1in+\voffset+\topmargin+\headheight+\headsep-30bp\relax){\usebox{\rr@fullbox}}\end{picture}\clearpage}
+% ------------------------------------------------------------------ the strip of the summary's apply box
+\ifrr@frontopt
+\newlength{\rrFcu}
+% the strip of the apply box: the four cards of the README's "how it works" (1 Install, 2 Run, 3 Choose in this
+% file, 4 Apply), drawn in its coordinates (226 x 248 units per card, y down); #1 = the lit card (0: all lit, the
+% static strip shown by every viewer and in print)
+\definecolor{rrcG}{HTML}{0B3A26}\definecolor{rrcK}{HTML}{16181D}\definecolor{rrcP}{HTML}{FDFBF4}
+\definecolor{rrcB}{HTML}{2A7FC6}\definecolor{rrcBb}{HTML}{E6F1FB}\definecolor{rrcR}{HTML}{C80000}
+\definecolor{rrcO}{HTML}{E07B00}\definecolor{rrcV}{HTML}{7B3FA0}\definecolor{rrcN}{HTML}{D9ECFA}
+\definecolor{rrcY}{HTML}{F2C14E}\definecolor{rrcYd}{HTML}{E0A000}\definecolor{rrcE}{HTML}{1F8A5B}
+\definecolor{rrcGr}{HTML}{E4E2DC}\definecolor{rrcGh}{HTML}{CFCCC4}\definecolor{rrcL}{HTML}{8FD0FF}
+\definecolor{rrcT}{HTML}{E8E8E8}\definecolor{rrcM}{HTML}{7FDC9F}
+\newcommand{\rrFcardhead}[2]{\fill[rrcP,draw=rrcG,line width=1.2pt,rounded corners=5pt] (0,0) rectangle (226,248);
+  \fill[rrcG] (24,26) circle (13);\node[text=white,font=\sffamily\bfseries\fontsize{7.5}{7.5}\selectfont] at (24,26) {#1};
+  \node[anchor=west,text=rrcK,font=\sffamily\bfseries\fontsize{8.6}{8.6}\selectfont] at (42,26) {#2};}
+\newcommand{\rrFcards}[1]{\begin{tikzpicture}[x=\rrFcu,y=-\rrFcu,line cap=round,line join=round]
+  \def\rrFlit##1{\ifnum#1=0 1\else\ifnum#1=##1 1\else 0.28\fi\fi}
+  % 1 Install
+  \begin{scope}[opacity=\rrFlit{1}]
+  \rrFcardhead{1}{Install}
+  \fill[rrcK,rounded corners=4pt] (14,48) rectangle (212,196);
+  \fill[rrcR] (26,59) circle (3.5);\fill[rrcYd] (37,59) circle (3.5);\fill[rrcE] (48,59) circle (3.5);
+  \begin{scope}[font=\ttfamily\fontsize{5.4}{6.4}\selectfont]
+  \node[anchor=west,text=rrcL,align=left] at (20,84) {> Set up reviewer2-repellent\\\ \ following its SETUP.md};
+  \draw[rrcM,line width=1pt] (23,114)--(26,117)--(31,110);
+  \node[anchor=west,text=rrcT,align=left] at (34,118) {python3, latexmk, poppler\\\textcolor{orange}{refchecker: missing}};
+  \node[anchor=west,text=rrcT] at (20,148) {Install refchecker? [y/n]};
+  \node[anchor=west,text=rrcL] at (20,166) {> y};
+  \draw[rrcM,line width=1pt] (23,180)--(26,183)--(31,176);\node[anchor=west,text=rrcM] at (34,180) {ready};
+  \end{scope}
+  \node[text=rrcK!80,align=center,font=\sffamily\fontsize{6}{7.2}\selectfont] at (113,222) {Your agent follows SETUP.md and\\installs nothing without your yes.};
+  \end{scope}
+  % 2 Run
+  \begin{scope}[shift={(234,0)},opacity=\rrFlit{2}]
+  \rrFcardhead{2}{Run}
+  \filldraw[fill=rrcBb,draw=rrcB,line width=0.8pt,rounded corners=4pt] (14,48) rectangle (212,98);
+  \filldraw[fill=rrcBb,draw=rrcB,line width=0.8pt] (60,97.5)--(48,110)--(48,97.5);
+  \node[anchor=west,text=rrcK,align=left,font=\sffamily\fontsize{6.4}{8.6}\selectfont] at (20,73) {Run Reviewer 2 on my paper.\\It goes to SIGIR 2027.};
+  \fill[rrcYd] (18,128)--(40,128)--(46,134)--(90,134)--(90,142)--(18,142)--cycle;\fill[rrcY,rounded corners=1pt] (18,136) rectangle (90,156);
+  \node[anchor=west,align=left,font=\ttfamily\fontsize{5.4}{6.6}\selectfont,text=rrcK] at (94,144) {reviewer2-repellent/\\\textcolor{gray}{\ \ <date>/}};
+  \draw[gray!60] (36,166)--(36,218)--(48,218) (36,180)--(48,180) (36,199)--(48,199);
+  \filldraw[fill=white,draw=gray] (52,174) rectangle (62,187);\node[anchor=west,font=\ttfamily\fontsize{5.8}{6.8}\selectfont] at (66,181) {report.md};
+  \filldraw[fill=white,draw=rrcR] (52,193) rectangle (62,206);\node[anchor=west,text=rrcR,font=\ttfamily\bfseries\fontsize{5.8}{6.8}\selectfont] at (66,200) {changes.pdf};
+  \fill[rrcY,rounded corners=0.5pt] (52,214) rectangle (64,223);\node[anchor=west,font=\ttfamily\fontsize{5.8}{6.8}\selectfont] at (66,219) {corrected/};
+  \node[text=rrcK!80,font=\sffamily\fontsize{6}{7.2}\selectfont] at (113,234) {Open your agent in the paper's folder.};
+  \end{scope}
+  % 3 Choose: this very file
+  \begin{scope}[shift={(468,0)},opacity=\rrFlit{3}]
+  \rrFcardhead{3}{Choose}
+  \node[anchor=east,text=white,font=\sffamily\bfseries\fontsize{5.6}{5.6}\selectfont,fill=rrcR,rounded corners=2pt,inner sep=1.5pt] at (216,26) {this file};
+  \filldraw[fill=rrcGr,draw=gray,rounded corners=3pt] (8,42) rectangle (218,200);
+  \fill[rrcGh,rounded corners=3pt] (8,42) rectangle (218,58);\fill[rrcGh] (8,52) rectangle (218,60);
+  \fill[rrcR] (14,45)--(26,45)--(30,49)--(30,57)--(14,57)--cycle;\node[text=white,font=\sffamily\bfseries\fontsize{3.2}{3.2}\selectfont] at (22,52) {PDF};
+  \node[anchor=west,text=rrcK,font=\sffamily\bfseries\fontsize{6}{6}\selectfont] at (33,51) {changes.pdf};
+  \filldraw[fill=white,draw=gray!80] (16,64) rectangle (146,196);
+  \fill[gray!35] (24,72) rectangle ++(100,3.5) (24,80) rectangle ++(110,3.5) (24,124) rectangle ++(104,3.5) (24,132) rectangle ++(86,3.5) (24,172) rectangle ++(106,3.5) (24,182) rectangle ++(96,3.5);
+  \begin{scope}[font=\sffamily\fontsize{5.8}{5.8}\selectfont]
+  \node[anchor=west,text=rrcK,inner sep=0] at (22,102) {MRR};
+  \node[anchor=west,text=rrcR,inner sep=0] (o) at (50,102) {42.1};\draw[rrcR,line width=0.6pt] (o.west)--(o.east);
+  \node[anchor=west,text=rrcR,inner sep=0,font=\sffamily\bfseries\fontsize{5.8}{5.8}\selectfont] at (76,102) {41.2};
+  \node[text=white,fill=rrcR,rounded corners=1.5pt,inner sep=1pt,font=\sffamily\bfseries\fontsize{4.6}{4.6}\selectfont] at (110,102) {\#12};
+  \filldraw[fill=white,draw=rrcK,line width=0.7pt] (124,96) rectangle ++(11,11);\draw[rrcR,line width=1.1pt] (126.5,101.5)--(129,104.5)--(133.5,98.5);
+  \node[anchor=west,text=rrcK,inner sep=0] at (22,152) {we};
+  \node[anchor=west,text=rrcO,inner sep=0,font=\sffamily\bfseries\fontsize{5.8}{5.8}\selectfont] at (38,152) {report};
+  \node[text=white,fill=rrcO,rounded corners=1.5pt,inner sep=1pt,font=\sffamily\bfseries\fontsize{4.6}{4.6}\selectfont] at (84,152) {\#7};
+  \filldraw[fill=white,draw=rrcK,line width=0.7pt] (96,146.5) rectangle ++(11,11);\draw[rrcO,line width=1.1pt] (98.5,152)--(101,155)--(105.5,149);
+  \node[anchor=west,text=rrcK,inner sep=0] at (22,190) {which};
+  \node[anchor=west,text=rrcV,inner sep=0,font=\sffamily\bfseries\fontsize{5.8}{5.8}\selectfont] at (52,190) {clearly};
+  \node[text=white,fill=rrcV,rounded corners=1.5pt,inner sep=1pt,font=\sffamily\bfseries\fontsize{4.6}{4.6}\selectfont] at (104,190) {\#31};
+  \filldraw[fill=white,draw=rrcK,line width=0.7pt] (118,184.5) rectangle ++(11,11);
+  \end{scope}
+  \fill[white,draw=rrcK,line width=0.5pt] (124,190)--(124,205)--(128,201)--(131,208)--(133.5,207)--(130.5,200)--(136,200)--cycle;
+  \draw[rrcB,line width=0.5pt] (146,101)--(152,101);
+  \filldraw[fill=rrcN,draw=rrcB,line width=0.6pt,rounded corners=2pt] (152,84) rectangle (214,122);
+  \node[anchor=west,align=left,text=rrcK,font=\sffamily\fontsize{4.6}{5.6}\selectfont] at (155,103) {\#12 Table 3\\says 41.2\\\textcolor{gray}{(text: 42.1)}};
+  \begin{scope}[shift={(168,148)}]
+  \fill[rrcB,rounded corners=2pt] (0,0) rectangle (32,32);\fill[white] (7,3) rectangle (25,13);\fill[rrcB] (19,5) rectangle (23,11);\fill[rrcBb] (6,18) rectangle (26,30);
+  \node[text=rrcB,font=\sffamily\bfseries\fontsize{6}{6}\selectfont] at (16,40) {Save};
+  \end{scope}
+  \node[text=rrcK!80,align=center,font=\sffamily\fontsize{6}{7.2}\selectfont] at (113,222) {In this PDF, ticked = applied.\\Click a box to change it, then save.};
+  \end{scope}
+  % 4 Apply
+  \begin{scope}[shift={(702,0)},opacity=\rrFlit{4}]
+  \rrFcardhead{4}{Apply}
+  \filldraw[fill=rrcBb,draw=rrcB,line width=0.8pt,rounded corners=4pt] (14,48) rectangle (212,98);
+  \filldraw[fill=rrcBb,draw=rrcB,line width=0.8pt] (60,97.5)--(48,110)--(48,97.5);
+  \node[anchor=west,text=rrcK,align=left,font=\sffamily\fontsize{6.4}{8.6}\selectfont] at (20,73) {Apply my choices in\\{\ttfamily\dots/changes.pdf}};
+  \fill[rrcE] (113,150) circle (26);\draw[white,line width=2.6pt] (100,150)--(109,160)--(126,139);
+  \node[text=rrcE,font=\ttfamily\bfseries\fontsize{6.6}{6.6}\selectfont] at (113,192) {corrected/ updated};
+  \node[text=rrcK!80,align=center,font=\sffamily\fontsize{6}{7.2}\selectfont] at (113,222) {Exactly the changes you ticked.\\Copy it over your sources.};
+  \end{scope}
+\end{tikzpicture}}
+% \rrFstrip: the four cards at the line width; with animate, one card lit at a time (about 4.5 s each, looping) in
+% Acrobat and Reader, the poster (all cards lit) everywhere else and in print
+\newcommand{\rrFstrip}{\setlength{\rrFcu}{\dimexpr\linewidth/930\relax}\noindent
+  \ifdefined\animategraphics
+    \begin{animateinline}[autoplay,loop,poster=first]{0.22}\rrFcards{0}\newframe\rrFcards{1}\newframe\rrFcards{2}%
+      \newframe\rrFcards{3}\newframe\rrFcards{4}\end{animateinline}%
+  \else\rrFcards{0}\fi}
+\fi
+% ------------------------------------------------------------------ item check boxes ("do it" / "don't")
+% r2states.tex (apply_edits.py) holds one \rritemstate{n}{ticked 1/0}{read-only 1/0}{reason} per item that has
+% something to apply. Each such item is one AcroForm field "item-n" (a check box) with a widget at every tag of the
+% item (drawn at shipout at the place the tag reserved, from the .aux positions of the previous run), in the header
+% of its margin box and in its row of the decision sheet (\rritembox{n}); the widgets share the field's value, so
+% ticking one ticks all. Read-only items (facts to give) look disabled. read_choices.py reads the saved PDF.
+\newif\ifrr@boxes
+\newlength{\rr@cbsize}\setlength{\rr@cbsize}{6.5bp}
+\newcommand{\rritemstate}[4]{\rr@boxestrue
+  \expandafter\gdef\csname rr@st@#1\endcsname{#2}\expandafter\gdef\csname rr@ro@#1\endcsname{#3}%
+  \expandafter\gdef\csname rr@why@#1\endcsname{#4}\rr@newfield{#1}}
+% the field of item #1, reserved when the states are read (so every field is known before the first page): listed
+% in our /AcroForm, or in the one of pdfbase (animate, media9) when that package manages the form
+\newcommand{\rr@newfield}[1]{\ifrr@nativeform\ifcsname rr@fld@#1\endcsname\else
+  \pdfobj reserveobjnum \expandafter\xdef\csname rr@fld@#1\endcsname{\the\pdflastobj}%
+  \expandafter\gdef\csname rr@kids@#1\endcsname{}%
+  \edef\rr@tmpf{\noexpand\rr@writefield{#1}}\expandafter\g@addto@macro\expandafter\rr@itemfields\expandafter{\rr@tmpf}%
+  \ifcsname pbs_appendtofields:n\endcsname
+    \edef\rr@tmpf{\csname rr@fld@#1\endcsname\space 0 R}%
+    \expandafter\expandafter\csname pbs_appendtofields:n\endcsname\expandafter{\rr@tmpf}%
+  \else\xdef\rr@cbfields{\rr@cbfields\space\csname rr@fld@#1\endcsname\space 0 R}\fi
+  \fi\fi}
+\newcommand{\rr@boxat}[4]{% item, page, x, y (sp) of a tag: the widgets to draw on that page
+  \ifcsname rr@bx@#2\endcsname
+    \expandafter\xdef\csname rr@bx@#2\endcsname{\unexpanded\expandafter\expandafter\expandafter
+      {\csname rr@bx@#2\endcsname}\noexpand\rr@dobox{#1}{#3}{#4}}%
+  \else\expandafter\xdef\csname rr@bx@#2\endcsname{\noexpand\rr@dobox{#1}{#3}{#4}}\fi}
+\newcommand{\rr@drawboxes}{\ifcsname rr@bx@\the\rr@abspage\endcsname
+  \def\rr@dobox##1##2##3{\put(\dimexpr##2sp+0.5pt\relax,\dimexpr##3sp-\paperheight-0.3pt\relax){\rritembox{##1}}}%
+  \csname rr@bx@\the\rr@abspage\endcsname\fi}
+\def\rr@itemfields{}
+\newcommand{\rr@ibsetup}{% appearances: ticked, unticked, disabled (6.5bp)
+  \ifdefined\rr@ibyes\else
+    \setbox\z@\hbox to 6.5bp{\vrule width\z@ height 6.5bp depth\z@\rr@literal{q 1 g 0.28 0.32 0.40 RG 0.55 w
+      0.3 0.3 5.9 5.9 re B 0.75 0 0 RG 1.1 w 1 J 1 j 1.3 3.4 m 2.7 1.6 l 5.3 5.2 l S Q}\hfil}%
+    \immediate\pdfxform\z@ \xdef\rr@ibyes{\the\pdflastxform}%
+    \setbox\z@\hbox to 6.5bp{\vrule width\z@ height 6.5bp depth\z@\rr@literal{q 1 g 0.28 0.32 0.40 RG 0.55 w
+      0.3 0.3 5.9 5.9 re B Q}\hfil}%
+    \immediate\pdfxform\z@ \xdef\rr@iboff{\the\pdflastxform}%
+    \setbox\z@\hbox to 6.5bp{\vrule width\z@ height 6.5bp depth\z@\rr@ibroglyph\hfil}%
+    \immediate\pdfxform\z@ \xdef\rr@ibro{\the\pdflastxform}%
+  \fi}
+% the widget of item #1 here (zero depth, \rr@cbsize square); without pdfTeX a plain drawn box
+\newcommand{\rritembox}[1]{\ifcsname rr@st@#1\endcsname
+  \ifrr@nativeform
+    \rr@ibsetup
+    \rr@newfield{#1}%
+    \pdfannot reserveobjnum \edef\rr@wobj{\the\pdflastannot}%
+    \expandafter\xdef\csname rr@kids@#1\endcsname{\csname rr@kids@#1\endcsname\space\rr@wobj\space 0 R}%
+    \pdfannot useobjnum \rr@wobj width \rr@cbsize height \rr@cbsize depth \z@ {/Subtype/Widget/F 4
+      /Parent \csname rr@fld@#1\endcsname\space 0 R/H/P
+      /AS/\if1\csname rr@st@#1\endcsname Yes\else Off\fi
+      /MK<</BC[0.28 0.32 0.40]/BG[1 1 1]/CA(4)>>/DA(/ZaDb 0 Tf 0.75 0 0 rg)
+      /AP<</N<</Yes \rr@ibyes\space 0 R/Off \if1\csname rr@ro@#1\endcsname\rr@ibro\else\rr@iboff\fi\space 0 R>>>>}%
+    \hbox to \rr@cbsize{\vrule width\z@ height\rr@cbsize\hfil}%
+  \else\if1\csname rr@ro@#1\endcsname\rrboxsym{2}\else\rrboxsym{\csname rr@st@#1\endcsname}\fi\fi\fi}
+\newcommand{\rr@writefield}[1]{% the field: written once the last page is out
+  \immediate\pdfobj useobjnum \csname rr@fld@#1\endcsname{<</FT/Btn/T(item-#1)
+    /TU(report item #1: ticked = apply this change)
+    /V/\if1\csname rr@st@#1\endcsname Yes\else Off\fi/Ff \if1\csname rr@ro@#1\endcsname 1\else 0\fi
+    /Kids[\csname rr@kids@#1\endcsname]/DA(/ZaDb 0 Tf 0.75 0 0 rg)>>}}
+% the disabled box of an item that waits for the authors' facts: a dashed orange square with three dots (never
+% ticked; read_choices.py reports it as read-only)
+\def\rr@ibroglyph{\rr@literal{q 0.99 0.95 0.90 rg 0.88 0.43 0 RG 0.6 w [1.2 0.8] 0 d 0.3 0.3 5.9 5.9 re B
+  0.88 0.43 0 rg 1.45 3.0 0.75 0.75 re f 2.88 3.0 0.75 0.75 re f 4.3 3.0 0.75 0.75 re f Q}}
+% a printed box symbol (legends; engines without form fields): 1 ticked, 0 not, 2 disabled (waits for your facts)
+\newcommand{\rrboxsym}[1]{\leavevmode\hbox to 6.5bp{\vrule width\z@ height 6.5bp depth\z@
+  \if2#1\rr@ibroglyph\else\if1#1\rr@literal{q 1 g 0.28 0.32 0.40 RG 0.55 w 0.3 0.3 5.9 5.9 re B 0.75 0 0 RG 1.1 w 1 J 1 j 1.3 3.4 m 2.7 1.6 l
+    5.3 5.2 l S Q}\else\rr@literal{q 1 g 0.28 0.32 0.40 RG 0.55 w 0.3 0.3 5.9 5.9 re B Q}\fi\fi\hfil}}
+% Clickable check boxes (decision sheet). pdfTeX: native widgets with explicit /Yes and /Off appearances, listed
+% in the catalog's /AcroForm at the end (Preview and Acrobat can tick them and save the PDF). Other engines: hyperref
+% \CheckBox fields. Put them between \rrbeginform and \rrendform.
+\newif\ifrr@nativeform
+\ifdefined\pdfannot\ifdefined\pdfxform\ifdefined\pdfcatalog\rr@nativeformtrue\fi\fi\fi
+\def\rr@cbfields{}
+\newcommand{\rr@addfield}[1]{% a field object: in pdfbase's /AcroForm when that package writes one, else in ours
+  \ifcsname pbs_appendtofields:n\endcsname
+    \edef\rr@tmpf{#1\space 0 R}%
+    \expandafter\expandafter\csname pbs_appendtofields:n\endcsname\expandafter{\rr@tmpf}%
+  \else\xdef\rr@cbfields{\rr@cbfields\space#1\space 0 R}\fi}
+\newcommand{\rr@cbsetup}{% appearance streams and the ZapfDingbats font, once
+  \ifdefined\rr@cbyes\else
+    \setbox\z@\hbox to 9bp{\vrule width\z@ height 9bp depth\z@\rr@literal{q 1 g 0.37 0.41 0.47 RG 0.6 w
+      0.3 0.3 8.4 8.4 re B Q}\hfil}%
+    \immediate\pdfxform\z@ \xdef\rr@cboff{\the\pdflastxform}%
+    \setbox\z@\hbox to 9bp{\vrule width\z@ height 9bp depth\z@\rr@literal{q 1 g 0.37 0.41 0.47 RG 0.6 w
+      0.3 0.3 8.4 8.4 re B 0 0 0 RG 1.3 w 1 J 1 j 2 4.7 m 3.8 2.4 l 7.2 7.1 l S Q}\hfil}%
+    \immediate\pdfxform\z@ \xdef\rr@cbyes{\the\pdflastxform}%
+    \immediate\pdfobj{<</Type/Font/Subtype/Type1/BaseFont/ZapfDingbats>>}\xdef\rr@zadb{\the\pdflastobj}%
+  \fi}
+\newcommand{\rrcheckbox}[1]{%
+  \ifrr@nativeform
+    \rr@cbsetup
+    \pdfannot reserveobjnum \edef\rr@cbobj{\the\pdflastannot}%
+    \rr@addfield{\rr@cbobj}%
+    \raisebox{-1.5pt}{\pdfannot useobjnum \rr@cbobj width 9bp height 9bp depth \z@ {/Subtype/Widget/FT/Btn/F 4
+      /T(#1)/V/Off/AS/Off/H/P/MK<</BC[0.37 0.41 0.47]/BG[1 1 1]/CA(4)>>/DA(/ZaDb 0 Tf 0 g)
+      /AP<</N<</Yes \rr@cbyes\space 0 R/Off \rr@cboff\space 0 R>>>>}\hbox to 9bp{\vrule width\z@ height 9bp\hfil}}%
+  \else\ifdefined\CheckBox
+    \raisebox{-1.5pt}{\CheckBox[name={#1},width=9pt,height=9pt,bordercolor={0.37 0.41 0.47},
+      backgroundcolor={1 1 1}]{}}%
+  \else\fbox{\phantom{x}}\fi\fi}
+\newcommand{\rrbeginform}{\ifrr@nativeform\else\ifdefined\CheckBox\begin{Form}\fi\fi}
+\newcommand{\rrendform}{\ifrr@nativeform\else\ifdefined\CheckBox\end{Form}\fi\fi}
+% Answer fields: \rranswer{n}{width}{height} is a multi-line text field "answer-n" (empty, Helvetica 9pt, a visible
+% border on a light background) where the author types the answer to the question of item n (decision sheet, under
+% the question). pdfTeX: a native widget with its own appearance, listed in our /AcroForm or in pdfbase's (animate),
+% with /Helv in the form's /DR. Other engines: a hyperref \TextField (between \rrbeginform and \rrendform).
+% read_choices.py reads the typed text from the saved PDF.
+\newlength{\rranswerheight}\setlength{\rranswerheight}{34bp}
+\newlength{\rr@answ}\newlength{\rr@ansh}
+\newcommand{\rr@txsetup}{% the Helvetica font of the form, once (also put in pdfbase's /DR when it writes the form)
+  \ifdefined\rr@helv\else
+    \rr@cbsetup
+    \immediate\pdfobj{<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>}%
+    \xdef\rr@helv{\the\pdflastobj}%
+    \ifcsname g_pbs_form_fonts_tl\endcsname
+      \expandafter\xdef\csname g_pbs_form_fonts_tl\endcsname{\unexpanded\expandafter\expandafter\expandafter
+        {\csname g_pbs_form_fonts_tl\endcsname}/Helv \rr@helv\space 0 R/ZaDb \rr@zadb\space 0 R}%
+    \fi
+  \fi}
+\newcommand{\rranswer}[3]{\leavevmode\setlength{\rr@answ}{#2}\setlength{\rr@ansh}{#3}%
+  \ifrr@nativeform
+    \rr@txsetup
+    \setbox\z@\hbox to \rr@answ{\vrule width\z@ height\rr@ansh depth\z@\rr@literal{q 0.96 0.975 1 rg 0.37 0.41 0.47 RG
+      0.6 w 0.3 0.3 \strip@pt\dimexpr(\rr@answ-0.6bp)*7200/7227\relax\space
+      \strip@pt\dimexpr(\rr@ansh-0.6bp)*7200/7227\relax\space re B Q}\hfil}%
+    \immediate\pdfxform\z@ \edef\rr@txap{\the\pdflastxform}%
+    \pdfannot reserveobjnum \edef\rr@txobj{\the\pdflastannot}%
+    \rr@addfield{\rr@txobj}%
+    \hbox to \rr@answ{\pdfannot useobjnum \rr@txobj width \rr@answ height \rr@ansh depth \z@ {/Subtype/Widget
+      /FT/Tx/F 4/T(answer-#1)/TU(your answer to the question of report item #1)/Ff 4096/V()/DA(/Helv 9 Tf 0 g)/Q 0
+      /MK<</BC[0.37 0.41 0.47]/BG[0.96 0.975 1]>>/AP<</N \rr@txap\space 0 R>>}\vrule width\z@ height\rr@ansh
+      depth\z@\hfil}%
+  \else\ifdefined\TextField
+    \TextField[name={answer-#1},multiline=true,width=\rr@answ,height=\rr@ansh,bordercolor={0.37 0.41 0.47},
+      backgroundcolor={0.96 0.975 1},charsize=9pt,value={}]{}%
+  \else\fbox{\rule{0pt}{\dimexpr\rr@ansh-2\fboxsep\relax}\hspace{\dimexpr\rr@answ-2\fboxsep-2\fboxrule\relax}}\fi\fi}
+\AddToHook{enddocument/afterlastpage}{\ifrr@nativeform\rr@itemfields\ifx\rr@cbfields\@empty\else
+  \rr@cbsetup
+  \pdfcatalog{/AcroForm<</Fields[\rr@cbfields]/DR<</Font<</ZaDb \rr@zadb\space 0 R\ifdefined\rr@helv/Helv \rr@helv
+    \space 0 R\fi>>>>/DA(/ZaDb 0 Tf 0 g)>>}\fi\fi}
+\endinput

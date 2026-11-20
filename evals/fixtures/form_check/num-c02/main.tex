@@ -1,0 +1,24 @@
+\documentclass{article}\usepackage{booktabs,multirow}\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Group label with a parenthetical second line.}\label{tab:a}
+\begin{tabular}{llrr}
+\toprule
+Collection & Method & Acc (\%) & QPS \\
+\midrule
+SIFT & Ours & 92.0 & 1,500 \\
+($d{=}128$, $\ell_2$) & FAISS & 90.0 & 1,000 \\
+\midrule
+Dragon & Ours & 80.0 & 150 \\
+($d{=}768$, IP) & FAISS & 78.0 & 100 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{SIFT again; FAISS Acc 90.5 here is a real inconsistency with 90.0.}\label{tab:b}
+\begin{tabular}{lrr}
+\toprule
+Method & Acc (\%) & QPS \\
+\midrule
+Ours & 92.0 & 1,500 \\
+FAISS & 90.5 & 1,000 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

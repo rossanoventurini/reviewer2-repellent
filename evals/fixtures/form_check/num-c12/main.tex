@@ -1,0 +1,17 @@
+\documentclass{article}\usepackage{booktabs}
+\begin{document}
+\section{Results}
+We use a batch of 128 queries per step and train on 500 examples; the test set has 1,000 queries.
+\begin{table}[h]\centering\caption{Share of time per phase (fractions); the last row is the sum.}\label{tab:a}
+\begin{tabular}{lrr}
+\toprule
+Phase & Base & Ours \\
+\midrule
+Parse & 0.20 & 0.30 \\
+Search & 0.50 & 0.40 \\
+Rerank & 0.30 & 0.30 \\
+Sum & 1.00 & 1.00 \\
+Total time (s) & 2.45 & 1.90 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

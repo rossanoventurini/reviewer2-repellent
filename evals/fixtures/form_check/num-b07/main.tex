@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{booktabs,makecell}
+\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Headers with makecell line breaks.}\label{tab:a}
+\begin{tabular}{lrr}
+\toprule
+Method & \makecell{Latency\\(ms)} & \makecell{Memory\\(GB)} \\
+\midrule
+Base & 640 & 12.5 \\
+Ours & 320 & 14.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Same runs again; Ours memory 14.5 here is a real inconsistency.}\label{tab:b}
+\begin{tabular}{lrr}
+\toprule
+Method & Latency (ms) & Memory (GB) \\
+\midrule
+Base & 640 & 12.5 \\
+Ours & 320 & 14.5 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Non-booktabs table whose header row is numeric (recall targets).}
+\begin{tabular}{|l|r|r|r|}
+\hline
+System & 90 & 95 & 99 \\
+\hline
+Base & 900 & 1180 & 2144 \\
+Ours & 520 & 640 & 1250 \\
+Other & 700 & 610 & 560 \\
+\hline
+\end{tabular}\end{table}
+\end{document}

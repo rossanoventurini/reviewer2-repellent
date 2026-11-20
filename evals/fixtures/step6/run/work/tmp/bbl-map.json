@@ -1,0 +1,10 @@
+{
+ "default": {
+  "quokka2019": 18,
+  "wombat2020": 19
+ },
+ "notes": {
+  "18": "Year 2017 -> 2019 as in the invented journal record.",
+  "19": "Acronym added to the booktitle."
+ }
+}

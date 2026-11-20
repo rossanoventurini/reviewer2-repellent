@@ -1,0 +1,15 @@
+\documentclass{article}\usepackage{booktabs}
+\begin{document}
+\section{Results}
+Ours is consistently better than Base on every metric (Table~\ref{tab:a}).
+\begin{table}[h]\centering\caption{Lower is better for the loss and drop columns. Bold: best.}\label{tab:a}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Recall loss (\%) & Accuracy drop (\%) & Speed-up time & WER (\%) \\
+\midrule
+Base & 1.0 & 0.5 & 1.0 & 12.0 \\
+Other & 3.0 & 2.0 & 1.5 & 11.0 \\
+Ours & \textbf{0.5} & \textbf{0.2} & \textbf{2.0} & \textbf{10.0} \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

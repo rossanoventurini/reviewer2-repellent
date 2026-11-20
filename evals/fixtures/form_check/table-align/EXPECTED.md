@@ -1,0 +1,1 @@
+# table-align: numbers centred (col 2) and left-aligned (col 4) with different widths -> CHECK; right-aligned (col 3) and centred equal-width (col 5) -> nothing; decimals 1.25/1.30/1.5/1.45 -> CHECK decimal places.

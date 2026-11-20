@@ -1,0 +1,19 @@
+\documentclass{article}\usepackage{booktabs}
+\newcommand{\sys}{\textsc{Zed}}\newcommand{\syshnsw}{\sys-HNSW}\newcommand{\sysrr}{\sys-RR}
+\begin{document}
+\begin{abstract}
+\sys{} consistently outperforms all baselines on every dataset at a fraction of the memory.
+\end{abstract}
+\section{Results}
+\begin{table}[h]\centering\caption{Main results. Bold: best.}\label{tab:main}
+\begin{tabular}{lrrr}
+\toprule
+Method & D1 nDCG@10 & D2 nDCG@10 & Memory (GB) \\
+\midrule
+HNSWlib & 70.0 & \textbf{81.0} & 12.0 \\
+Glass & 71.0 & 80.0 & 11.0 \\
+\syshnsw & \textbf{75.0} & 79.0 & 6.0 \\
+\sysrr & 74.0 & 80.5 & \textbf{5.0} \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

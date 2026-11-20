@@ -1,0 +1,1797 @@
+{
+ "_doc": "Regression expectations for scripts/form_check.py. Each fixture: args, must = [[SEV, kind substring, quote/where substring or ''], ...], must_not = same shape. Written from the critic's EXPECTED.md files (round 2).",
+ "hidden-fn": {
+  "args": [
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "PDF Subject metadata",
+    ""
+   ],
+   [
+    "FAIL",
+    "near-white colour used on text",
+    "ghost"
+   ],
+   [
+    "FAIL",
+    "hidden-text macro used",
+    "hide"
+   ],
+   [
+    "FAIL",
+    "hidden text",
+    "AddToShipoutPictureBG"
+   ],
+   [
+    "FAIL",
+    "hidden text",
+    "raisebox"
+   ],
+   [
+    "FAIL",
+    "hidden text",
+    "vspace*{-30cm}"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "negative vertical space",
+    ""
+   ]
+  ]
+ },
+ "hidden-fp": {
+  "args": [
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "possibly hidden text",
+    "rowcolor"
+   ],
+   [
+    "CHECK",
+    "possibly hidden text",
+    "phantom"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "hidden text",
+    ""
+   ],
+   [
+    "FAIL",
+    "near-white colour",
+    ""
+   ]
+  ]
+ },
+ "notes": {
+  "args": [
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "coloured note macro used in the text",
+    "\\rv"
+   ],
+   [
+    "FAIL",
+    "coloured note macro used in the text",
+    "todoX"
+   ],
+   [
+    "CHECK",
+    "highlighted text",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "notes package active",
+    "todonotes"
+   ],
+   [
+    "CHECK",
+    "notes package active",
+    "fixme"
+   ],
+   [
+    "FAIL",
+    "coloured note macro",
+    "quokka"
+   ]
+  ]
+ },
+ "comments-verb": {
+  "args": [
+   "--authors",
+   "names.txt",
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "author name in the text",
+    ""
+   ],
+   [
+    "FAIL",
+    "TODO marker",
+    ""
+   ],
+   [
+    "INFO",
+    "comment environment",
+    ""
+   ],
+   [
+    "INFO",
+    "comment (public if the source is posted)",
+    "LLM instruction"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "instruction to LLM/reviewer in the text",
+    ""
+   ]
+  ]
+ },
+ "log-refs": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "undefined reference",
+    "eq:nope"
+   ],
+   [
+    "FAIL",
+    "undefined citation",
+    "nokey"
+   ],
+   [
+    "FAIL",
+    "label defined twice",
+    "main.tex:5, main.tex:8"
+   ],
+   [
+    "FAIL",
+    "float too large",
+    ""
+   ],
+   [
+    "FAIL",
+    "overfull",
+    "part-one.tex"
+   ]
+  ],
+  "must_not": []
+ },
+ "floats": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "float printed after the references",
+    "Figure 1"
+   ],
+   [
+    "FAIL",
+    "float printed after the references",
+    "Figure 2"
+   ],
+   [
+    "FAIL",
+    "float printed after the references",
+    "Figure 3"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "float never referenced",
+    "Figure 2"
+   ],
+   [
+    "CHECK",
+    "float never referenced",
+    "Table 2"
+   ],
+   [
+    "FAIL",
+    "float printed after the references",
+    "Figure A.1"
+   ]
+  ]
+ },
+ "widows": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "widow/orphan/page-break hyphen",
+    "page 2"
+   ]
+  ],
+  "must_not": []
+ },
+ "layout": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "layout hack",
+    "fullpage"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "savetrees"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "titlesec"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "baselinestretch"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "titlespacing"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "textfloatsep"
+   ],
+   [
+    "CHECK",
+    "layout hack",
+    "enlargethispage"
+   ],
+   [
+    "CHECK",
+    "negative vertical space",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "layout hack",
+    "lmodern"
+   ]
+  ]
+ },
+ "tables": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "ratio in table not reproducible",
+    "1.4"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "ratio in table not reproducible",
+    "1.0×"
+   ]
+  ]
+ },
+ "names-acronyms": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "name written in different ways",
+    "Qlr-Hnsw"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "acronym",
+    "HTTP ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "NDCG ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "MRR ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "CP ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "EE ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "PQ ×"
+   ],
+   [
+    "CHECK",
+    "acronym",
+    "HNSW ×"
+   ],
+   [
+    "CHECK",
+    "name written in different ways",
+    "Dpr"
+   ]
+  ]
+ },
+ "bib": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same title under different keys",
+    "dup1"
+   ],
+   [
+    "CHECK",
+    "'%' does not comment out",
+    "commented"
+   ],
+   [
+    "CHECK",
+    "bib entry without year",
+    "noyear"
+   ],
+   [
+    "FAIL",
+    "bib key defined twice",
+    "repeated"
+   ],
+   [
+    "FAIL",
+    "bibtex error",
+    "Repeated entry"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "capitals lost",
+    "HNSW"
+   ],
+   [
+    "CHECK",
+    "article without journal",
+    "strjournal"
+   ],
+   [
+    "CHECK",
+    "'%' does not comment out",
+    "uncommented"
+   ]
+  ]
+ },
+ "blind": {
+  "args": [
+   "--authors",
+   "names.txt",
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "author name in the text",
+    ""
+   ],
+   [
+    "CHECK",
+    "first-person ownership",
+    ""
+   ],
+   [
+    "FAIL",
+    "identifying repository link",
+    "janedoe"
+   ],
+   [
+    "FAIL",
+    "identifying repository link",
+    "acme-lab"
+   ],
+   [
+    "FAIL",
+    "acknowledgements",
+    ""
+   ],
+   [
+    "CHECK",
+    "grant number",
+    "123456"
+   ],
+   [
+    "FAIL",
+    "e-mail in the text",
+    "jane@doe.org"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "author metadata in the source",
+    ""
+   ],
+   [
+    "FAIL",
+    "PDF Author metadata",
+    ""
+   ],
+   [
+    "FAIL",
+    "identifying repository link",
+    "facebookresearch"
+   ]
+  ]
+ },
+ "blind-single": {
+  "dir": "blind",
+  "args": [
+   "--authors",
+   "names.txt",
+   "--blind",
+   "single"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "FAIL",
+    "author name",
+    ""
+   ],
+   [
+    "FAIL",
+    "acknowledgements",
+    ""
+   ],
+   [
+    "FAIL",
+    "e-mail",
+    ""
+   ],
+   [
+    "FAIL",
+    "identifying repository link",
+    ""
+   ],
+   [
+    "CHECK",
+    "first-person ownership",
+    ""
+   ],
+   [
+    "CHECK",
+    "grant number",
+    ""
+   ]
+  ]
+ },
+ "blind2": {
+  "args": [
+   "--authors",
+   "names.txt",
+   "--blind",
+   "double"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "acknowledgements",
+    ""
+   ],
+   [
+    "FAIL",
+    "e-mail in the text",
+    "jane@doe.org"
+   ],
+   [
+    "FAIL",
+    "identifying repository link",
+    "janedoe"
+   ],
+   [
+    "FAIL",
+    "author name in the text",
+    ""
+   ],
+   [
+    "CHECK",
+    "first-person ownership",
+    ""
+   ],
+   [
+    "CHECK",
+    "grant number",
+    ""
+   ]
+  ],
+  "must_not": []
+ },
+ "source-prose": {
+  "args": [
+   "--blind",
+   "single"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "doubled word",
+    "the the"
+   ],
+   [
+    "CHECK",
+    "doubled word",
+    "against"
+   ],
+   [
+    "CHECK",
+    "name typed without its macro",
+    "FooBar"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "doubled word",
+    "at at"
+   ],
+   [
+    "CHECK",
+    "doubled word",
+    "rrr"
+   ],
+   [
+    "CHECK",
+    "name typed without its macro",
+    "main.tex:6"
+   ]
+  ]
+ },
+ "round3": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "\\label before \\caption",
+    "fig:a"
+   ],
+   [
+    "FAIL",
+    "unnumbered display",
+    "eq:star"
+   ],
+   [
+    "CHECK",
+    "reference to the section it is in",
+    "sec:intro"
+   ],
+   [
+    "CHECK",
+    "unnumbered section",
+    "Motivation"
+   ],
+   [
+    "CHECK",
+    "submission-status text",
+    "under review"
+   ],
+   [
+    "CHECK",
+    "probable misspelling",
+    "seperate"
+   ],
+   [
+    "CHECK",
+    "doubled word",
+    "The the"
+   ],
+   [
+    "CHECK",
+    "compound written in different ways",
+    "trade-off"
+   ],
+   [
+    "CHECK",
+    "content outside the text block",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "probable misspelling",
+    "organizes"
+   ]
+  ]
+ },
+ "r4-bbox-twocol": {
+  "args": [
+   "--blind",
+   "single",
+   "--offline",
+   "--no-widows",
+   "--no-page-numbers"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "content outside the text block",
+    "p"
+   ],
+   [
+    "FAIL",
+    "page numbers printed",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "very small text",
+    ""
+   ]
+  ]
+ },
+ "r4-labels": {
+  "args": [
+   "--blind",
+   "single",
+   "--offline",
+   "--no-widows"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "\\label before \\caption",
+    "fig:early"
+   ],
+   [
+    "CHECK",
+    "reference to the section it is in",
+    "sec:details"
+   ],
+   [
+    "CHECK",
+    "reference to the section it is in",
+    "sec:intro"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "\\label before \\caption",
+    "fig:a"
+   ],
+   [
+    "FAIL",
+    "\\label before \\caption",
+    "fig:pair"
+   ],
+   [
+    "FAIL",
+    "unnumbered display",
+    "eq:tagged"
+   ],
+   [
+    "CHECK",
+    "unnumbered section",
+    "Proof"
+   ]
+  ]
+ },
+ "r4-typos": {
+  "args": [
+   "--blind",
+   "single",
+   "--offline",
+   "--no-widows"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "doubled word",
+    "in in 2020"
+   ],
+   [
+    "CHECK",
+    "compound written in different ways",
+    "pre-trained"
+   ],
+   [
+    "CHECK",
+    "\\citet inside parentheses",
+    ""
+   ],
+   [
+    "CHECK",
+    "\\citep used as the subject",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "doubled word",
+    "in in-memory"
+   ],
+   [
+    "CHECK",
+    "doubled word",
+    "on on-device"
+   ],
+   [
+    "CHECK",
+    "doubled word",
+    "data data-driven"
+   ],
+   [
+    "CHECK",
+    "probable misspelling",
+    "therefor"
+   ],
+   [
+    "CHECK",
+    "probable misspelling",
+    "wether"
+   ],
+   [
+    "CHECK",
+    "submission-status text",
+    ""
+   ]
+  ]
+ },
+ "numbers": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "two swapped digits",
+    "2,414"
+   ],
+   [
+    "CHECK",
+    "different units",
+    "640 ms"
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "ours"
+   ],
+   [
+    "INFO",
+    "abstract/introduction/conclusions not found",
+    "3.7×"
+   ],
+   [
+    "CHECK",
+    "row breaks the trend",
+    "other"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "not found",
+    "1.6×"
+   ],
+   [
+    "CHECK",
+    "row breaks the trend",
+    "fourth"
+   ]
+  ]
+ },
+ "table-align": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "numbers centred",
+    "column 2"
+   ],
+   [
+    "CHECK",
+    "numbers left-aligned",
+    "column 4"
+   ],
+   [
+    "CHECK",
+    "decimal places differ",
+    "1.5"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "numbers",
+    "column 3"
+   ],
+   [
+    "CHECK",
+    "numbers centred",
+    "column 5"
+   ]
+  ]
+ },
+ "table-arith": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "average column does not match",
+    "ours"
+   ],
+   [
+    "CHECK",
+    "percentage above 100",
+    "102.0"
+   ],
+   [
+    "CHECK",
+    "two rows with exactly the same numbers",
+    "copy"
+   ],
+   [
+    "CHECK",
+    "a factor of k",
+    "factor 4"
+   ],
+   [
+    "INFO",
+    "no variance reported",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "average column does not match",
+    "baseline"
+   ],
+   [
+    "CHECK",
+    "average row does not match",
+    "column 2"
+   ]
+  ]
+ },
+ "num-b01": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "ours / d2 / qps: 2,500 vs 2,600"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "base"
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "r10"
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "1,000 vs"
+   ]
+  ]
+ },
+ "num-b02": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "CHECK",
+    "bold value is not the best",
+    ""
+   ],
+   [
+    "CHECK",
+    "row breaks the trend",
+    ""
+   ]
+  ]
+ },
+ "num-b03": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "average column does not match",
+    "ours: printed 80.0"
+   ],
+   [
+    "CHECK",
+    "bold value is not the best",
+    "92.3"
+   ],
+   [
+    "INFO",
+    "abstract/introduction/conclusions not found",
+    "90.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "not found",
+    "92.3"
+   ],
+   [
+    "CHECK",
+    "average column does not match",
+    "base"
+   ],
+   [
+    "CHECK",
+    "average column does not match",
+    "worse"
+   ],
+   [
+    "INFO",
+    "no variance reported",
+    ""
+   ]
+  ]
+ },
+ "num-b04": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "number not in the table the sentence cites",
+    "1.6M"
+   ],
+   [
+    "CHECK",
+    "unit differs from the table",
+    "640 ms"
+   ],
+   [
+    "INFO",
+    "numbers in the text not found",
+    "1e-4"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "not found",
+    "800k"
+   ],
+   [
+    "INFO",
+    "not found",
+    "1e-3"
+   ]
+  ]
+ },
+ "num-b05": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "value above 1 in a column of fractions",
+    "1.23"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "not found",
+    "95%"
+   ],
+   [
+    "INFO",
+    "not found",
+    "0.73"
+   ]
+  ]
+ },
+ "num-b06": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "CHECK",
+    "average column does not match",
+    ""
+   ],
+   [
+    "CHECK",
+    "average row does not match",
+    ""
+   ],
+   [
+    "CHECK",
+    "two columns with exactly the same numbers",
+    ""
+   ]
+  ]
+ },
+ "num-b07": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "ours / memorygb: 14.0 vs 14.5"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "row breaks the trend",
+    ""
+   ]
+  ]
+ },
+ "num-b08": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "nq/splade / r10: 60.0 vs 61.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "msmarco"
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "2021"
+   ]
+  ]
+ },
+ "num-b09": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "woreg / deltat1: -3.2 vs 3.2"
+   ],
+   [
+    "CHECK",
+    "bold value is not the best",
+    "bold -5.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "bold value is not the best",
+    "bold 1.5"
+   ],
+   [
+    "CHECK",
+    "average column does not match",
+    ""
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "woaug"
+   ]
+  ]
+ },
+ "num-b10": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "number not in the table the sentence cites",
+    "92.3"
+   ],
+   [
+    "INFO",
+    "abstract/introduction/conclusions not found",
+    "2.3×"
+   ],
+   [
+    "CHECK",
+    "speedup column does not match the times",
+    "ours: printed 2.6"
+   ],
+   [
+    "CHECK",
+    "bold value is not the best",
+    "bold 89.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "speedup column does not match the times",
+    "other"
+   ],
+   [
+    "CHECK",
+    "bold value is not the best",
+    "85.0"
+   ],
+   [
+    "CHECK",
+    "number not in the table the sentence cites",
+    "90.1"
+   ]
+  ]
+ },
+ "num-b11": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "INFO",
+    "same value at different precision",
+    "ours / acc: 92.34 vs 92.3"
+   ],
+   [
+    "INFO",
+    "same value at different precision",
+    "base / acc: 80.12 vs 80.1"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    ""
+   ],
+   [
+    "CHECK",
+    "percentage above 100",
+    ""
+   ]
+  ]
+ },
+ "num-b12": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "quantified claim vs wins",
+    "2/4"
+   ],
+   [
+    "INFO",
+    "row beats a bound row",
+    "ours > oracle"
+   ],
+   [
+    "CHECK",
+    "unit missing in an efficiency column",
+    "time"
+   ],
+   [
+    "INFO",
+    "imported numbers",
+    "base"
+   ],
+   [
+    "CHECK",
+    "ablation full model differs from the main table",
+    "90.5 vs ours 91.0"
+   ],
+   [
+    "INFO",
+    "removing a component improves the score",
+    "w/o a"
+   ],
+   [
+    "INFO",
+    "series over a numeric knob",
+    "recall: 80, 85, 83, 90"
+   ],
+   [
+    "INFO",
+    "evaluation set sizes",
+    "N=30"
+   ],
+   [
+    "INFO",
+    "margins of the best row",
+    "d1: 11.0"
+   ],
+   [
+    "INFO",
+    "no variance reported",
+    ""
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "unit missing in an efficiency column",
+    "time (ms)"
+   ],
+   [
+    "CHECK",
+    "row breaks the trend",
+    ""
+   ],
+   [
+    "INFO",
+    "removing a component improves the score",
+    "w/o b"
+   ]
+  ]
+ },
+ "unit-paragraph": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "different units",
+    "415 ms"
+   ]
+  ],
+  "must_not": []
+ },
+ "num-c01": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "full/ours / d2 / qps: 2,500 vs 2,600"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "bold value is not the best",
+    ""
+   ],
+   [
+    "INFO",
+    "row beats a bound row",
+    ""
+   ],
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "r@10"
+   ]
+  ]
+ },
+ "num-c02": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "sift/faiss / acc: 90.0 vs 90.5"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "same row and column in two tables",
+    "qps"
+   ]
+  ]
+ },
+ "num-c03": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "quantified claim vs wins",
+    "2/3"
+   ],
+   [
+    "INFO",
+    "margins of the best row",
+    "syshnsw"
+   ]
+  ],
+  "must_not": []
+ },
+ "num-c04": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "CHECK",
+    "bold value is not the best",
+    ""
+   ],
+   [
+    "CHECK",
+    "quantified claim vs wins",
+    ""
+   ],
+   [
+    "CHECK",
+    "unit missing in an efficiency column",
+    ""
+   ]
+  ]
+ },
+ "num-c05": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "average column does not match",
+    "ours: printed 80.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "average column does not match",
+    "recall-boost"
+   ]
+  ]
+ },
+ "num-c06": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "number not in the table the sentence cites",
+    "92.3"
+   ],
+   [
+    "CHECK",
+    "difference not reproducible from the cited table",
+    "3.1 points on t2"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "number not in the table the sentence cites",
+    "85.0"
+   ]
+  ]
+ },
+ "num-c07": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "CHECK",
+    "quantified claim vs wins",
+    ""
+   ]
+  ]
+ },
+ "num-c08": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "ablation full model differs from the main table",
+    "40.5 vs ours 41.0"
+   ],
+   [
+    "INFO",
+    "row beats a bound row",
+    "ours > exact search on ndcg@10: 41.0 vs 40.0"
+   ],
+   [
+    "INFO",
+    "removing a component improves the score",
+    "w/o pruning > full"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "row beats a bound row",
+    "dense"
+   ],
+   [
+    "INFO",
+    "row beats a bound row",
+    "> full"
+   ]
+  ]
+ },
+ "num-c09": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [],
+  "must_not": [
+   [
+    "CHECK",
+    "speedup column does not match the times",
+    ""
+   ]
+  ]
+ },
+ "num-c10": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "INFO",
+    "unit written in every cell",
+    "time"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "unit missing in an efficiency column",
+    ""
+   ]
+  ]
+ },
+ "num-c11": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "CHECK",
+    "average column does not match",
+    "ours: printed 72.0"
+   ]
+  ],
+  "must_not": [
+   [
+    "CHECK",
+    "average column does not match",
+    "base"
+   ]
+  ]
+ },
+ "num-c12": {
+  "args": [
+   "--blind",
+   "single",
+   "--no-widows",
+   "--offline"
+  ],
+  "must": [
+   [
+    "INFO",
+    "evaluation set sizes",
+    "N=1,000 queries"
+   ]
+  ],
+  "must_not": [
+   [
+    "INFO",
+    "evaluation set sizes",
+    "N=128"
+   ],
+   [
+    "INFO",
+    "evaluation set sizes",
+    "N=500"
+   ],
+   [
+    "CHECK",
+    "value above 1 in a column of fractions",
+    ""
+   ],
+   [
+    "CHECK",
+    "total row does not match",
+    ""
+   ]
+  ]
+ },
+ "source-hygiene": {
+  "args": [
+   "--offline",
+   "--no-widows",
+   "--facts"
+  ],
+  "must": [
+   [
+    "FAIL",
+    "Markdown in the text",
+    "**very fast**"
+   ],
+   [
+    "FAIL",
+    "Markdown in the text",
+    "wombat_search"
+   ],
+   [
+    "FAIL",
+    "Markdown in the text",
+    "## Results"
+   ],
+   [
+    "FAIL",
+    "Markdown in the text",
+    "[our repository]"
+   ],
+   [
+    "FAIL",
+    "Markdown in the text",
+    "main.tex:14, main.tex:15"
+   ],
+   [
+    "FAIL",
+    "Unicode character in the text",
+    "× on 1 line(s): it prints in the text font"
+   ],
+   [
+    "CHECK",
+    "Unicode character in the text",
+    "≤ on 1 line(s)"
+   ],
+   [
+    "FAIL",
+    "Unicode character in the text",
+    "em dash — on 1 line(s): mixed with ---"
+   ],
+   [
+    "FAIL",
+    "invisible character in the text",
+    "U+200B"
+   ],
+   [
+    "CHECK",
+    "non-breaking or special space character",
+    "U+00A0"
+   ],
+   [
+    "FAIL",
+    "straight quotes in the text",
+    "the best"
+   ],
+   [
+    "CHECK",
+    "comment mentions an LLM or a prompt",
+    "names an LLM tool (chatgpt)"
+   ],
+   [
+    "CHECK",
+    "comment mentions an LLM or a prompt",
+    "main.tex:21"
+   ],
+   [
+    "INFO",
+    "source hygiene checks",
+    "Markdown 6, Unicode 4"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "Markdown in the text",
+    "main.tex:2"
+   ],
+   [
+    "FAIL",
+    "Markdown in the text",
+    "main.tex:3"
+   ],
+   [
+    "FAIL",
+    "straight quotes in the text",
+    "quoted text"
+   ],
+   [
+    "CHECK",
+    "Unicode character in the text",
+    "en dash"
+   ],
+   [
+    "FAIL",
+    "Unicode character in the text",
+    "en dash"
+   ],
+   [
+    "CHECK",
+    "mixed quote styles",
+    ""
+   ]
+  ]
+ }
+}

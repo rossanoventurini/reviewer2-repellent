@@ -1,0 +1,1 @@
+# table-arith: Ours Avg 80.1 vs mean 79.0; Average row T1 71.8 vs mean of the rows 71.75 (ok by rounding) and T3 71.0 vs 71.0 ok; 102.0 in a (%) column; Other = Copy duplicated rows; factor 4 from 1200 to 400 is 3x; no variance in the paper.

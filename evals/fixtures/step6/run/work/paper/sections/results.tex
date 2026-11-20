@@ -1,0 +1,32 @@
+\section{Results}
+\label{sec:results}
+
+Table~\ref{tab:main} reports the throughput of every system at $90\%$ recall.
+Quokka is the fastest system on every collection and the gap grows with the
+collection size.
+
+\begin{table}[t]
+\centering
+\caption{Throughput (QPS) at 90\% recall, best in bold.}
+\label{tab:main}
+\begin{tabular}{lrr}
+System & Small & Large \\
+Quokka & \textbf{1200} & \textbf{340} \\
+Burrow & 1100 & 310 \\
+\end{tabular}
+\end{table}
+
+The speedup is
+\begin{equation}
+  s = \frac{1200}{1100} = 1.10,
+\end{equation}
+which is modest. The memory is measured with the resident set size.
+
+\begin{figure}[t]
+\centering
+\fbox{plot}
+\caption{Recall against throughput on the small collection.}
+\label{fig:plot}
+\end{figure}
+
+Figure~\ref{fig:plot} shows the trade-off. A recall of 0.9 is reached by every system.

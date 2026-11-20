@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage[disable]{todonotes}
+\usepackage[final]{fixme}
+\usepackage{soul}
+\newcommand{\rv}[1]{{\color{red}#1}}
+\newcommand{\todoX}[1]{\textbf{\color{red}TODO: #1}}
+\newcommand{\quokka}[1]{\textcolor{red}{#1}}
+\renewcommand{\quokka}[1]{#1}
+\begin{document}
+Body text. \rv{This red note is visible.} \todoX{fix the numbers} \quokka{this one was switched off}.
+\hl{highlighted sentence left in}.
+\todo{a disabled todo} \fxnote{a final-mode note}
+\end{document}

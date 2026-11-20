@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\begin{abstract}
+Ours consistently outperforms all baselines on every dataset, with no degradation in latency.
+\end{abstract}
+\section{Results}
+We evaluate on 30 hand-written queries. Ours wins by 1.2 points on average (Table~\ref{tab:main}).
+Baseline numbers marked with $^\dagger$ are taken from the original papers.
+\begin{table}[h]\centering\caption{Main results. Time without unit; oracle row; $\dagger$ = copied.}\label{tab:main}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & D1 & D2 & D3 & Time & N \\
+\midrule
+Oracle (upper bound) & 90.0 & 85.0 & 80.0 & 10 & 30 \\
+Base$^\dagger$ & 80.0 & 82.0 & 70.0 & 12 & 30 \\
+Ours & 91.0 & 81.0 & 72.0 & 15 & 30 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Ablation on D1. The full model should equal Ours in Table~\ref{tab:main} (91.0); it says 90.5.}
+\begin{tabular}{lr}
+\toprule
+Variant & D1 \\
+\midrule
+Full model & 90.5 \\
+w/o A & 91.5 \\
+w/o B & 88.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Scaling with k.}
+\begin{tabular}{lrrrr}
+\toprule
+k & 1 & 2 & 4 & 8 \\
+\midrule
+Recall & 80.0 & 85.0 & 83.0 & 90.0 \\
+Time (ms) & 1.0 & 2.0 & 4.0 & 3.5 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

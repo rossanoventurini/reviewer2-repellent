@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.aux
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+evals/fixtures/**/*.log
+evals/fixtures/**/*.pdf
+evals/fixtures/**/*.bbl
+evals/fixtures/**/*.blg
+evals/fixtures/**/*.out
+.claude/
+!evals/fixtures/step6/**/*.bbl
+/reviewer2-repellent/

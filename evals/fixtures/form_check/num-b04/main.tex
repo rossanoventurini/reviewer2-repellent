@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{booktabs,siunitx,amsmath}
+\begin{document}
+\section{Results}
+Our model has 1.6M parameters and an index of 800k entries (Table~\ref{tab:p}).
+The baseline needs \SI{640}{\milli\second} per query (Table~\ref{tab:t}), and
+its learning rate is $10^{-3}$, while ours uses 1e-4 and $3\times10^{-4}$.
+\begin{table}[h]\centering\caption{Model sizes.}\label{tab:p}
+\begin{tabular}{lrrr}
+\toprule
+Model & Params & Index & LR \\
+\midrule
+Base & 1.5M & 800k & 1e-3 \\
+Ours & 1.5M & 800k & $10^{-3}$ \\
+Big & 12M & 2.4M & $3\times10^{-4}$ \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{Latency ($\mu$s) per query, siunitx columns.}\label{tab:t}
+\begin{tabular}{lS[table-format=4.0]S[table-format=1.2]}
+\toprule
+Method & {Latency} & {Memory (GB)} \\
+\midrule
+Base & 640 & \num{1.25} \\
+Ours & 320 & \num{1.5e3} \\
+Big & \qty{900}{\micro\second} & \SI{2.5}{\giga\byte} \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

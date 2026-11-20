@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\begin{abstract}
+Our index answers queries with a speedup of up to $3.7\times$ over the baseline.
+\end{abstract}
+\section{Results}
+Table~\ref{tab:lat} reports the latency at each recall target. At 99\% the baseline needs $2\,414\,\mu$s,
+while ours needs 1,250\,$\mu$s; at 95\% they need 1,180\,$\mu$s and 640\,ms. The speedup is $1.6\times$.
+\begin{table}[h]
+\centering
+\caption{Latency ($\mu$s) at each recall target.}
+\label{tab:lat}
+\begin{tabular}{lrrr}
+\toprule
+System & 90 & 95 & 99 \\
+\midrule
+Baseline & 900 & 1,180 & 2,144 \\
+Ours & 520 & 640 & 1,250 \\
+Other & 700 & 610 & 560 \\
+Fourth & 400 & 450 & 800 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[h]
+\centering
+\caption{The 99\% column again, with memory.}
+\begin{tabular}{lrr}
+\toprule
+System & 99 & Memory \\
+\midrule
+Baseline & 2,144 & 12.5 \\
+Ours & 1,205 & 14.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{document}

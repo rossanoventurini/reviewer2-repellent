@@ -1,0 +1,723 @@
+{
+ "_doc": "Regression expectations for scripts/refs_check.py --no-refchecker (network needed; 'published version' items need the local DBLP db). Each fixture: bib (relative to evals/fixtures/refs_check), must = [[SEV, kind substring, quote/where substring], ...], must_not = same shape. The third item is usually the BibTeX key. Written from each fixture's EXPECTED.md; p4 (Faiss) is now in DBLP (IEEE TBD 2026), so its CHECK is right.",
+ "toy": {
+  "bib": "toy.bib",
+  "must": [
+   [
+    "FAIL",
+    "DOI points to another work",
+    "C3_wrong_doi"
+   ],
+   [
+    "FAIL",
+    "arXiv ID does not exist",
+    "C5_invented_arxiv"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "R3_bert_arxiv"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "R1_codd1970"
+   ],
+   [
+    "CHECK",
+    "",
+    "R1_codd1970"
+   ],
+   [
+    "FAIL",
+    "",
+    "R2_dpr2020"
+   ],
+   [
+    "CHECK",
+    "",
+    "R2_dpr2020"
+   ],
+   [
+    "FAIL",
+    "",
+    "R4_pagerank"
+   ],
+   [
+    "CHECK",
+    "",
+    "R4_pagerank"
+   ],
+   [
+    "FAIL",
+    "",
+    "R5_imagenet"
+   ],
+   [
+    "CHECK",
+    "",
+    "R5_imagenet"
+   ],
+   [
+    "FAIL",
+    "",
+    "R3_bert_arxiv"
+   ]
+  ]
+ },
+ "arxiv-ids": {
+  "bib": "adversarial/arxiv-ids/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "arXiv ID does not exist",
+    "a6_nonexistent"
+   ],
+   [
+    "FAIL",
+    "arXiv ID points to another paper",
+    "a7_wrong_paper"
+   ],
+   [
+    "FAIL",
+    "arXiv ID points to another paper",
+    "a10_dblp_corr_wrong_volume"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "a8_note_only"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "a9_dblp_corr_volume"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "a1_old_style_eprint"
+   ],
+   [
+    "FAIL",
+    "",
+    "a2_old_style_in_journal"
+   ],
+   [
+    "FAIL",
+    "",
+    "a3_versioned"
+   ],
+   [
+    "FAIL",
+    "",
+    "a4_url_only"
+   ],
+   [
+    "FAIL",
+    "",
+    "a5_doi_48550"
+   ],
+   [
+    "FAIL",
+    "",
+    "a8_note_only"
+   ],
+   [
+    "FAIL",
+    "",
+    "a9_dblp_corr_volume"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "a1_old_style_eprint"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "a2_old_style_in_journal"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "a3_versioned"
+   ]
+  ]
+ },
+ "biblatex": {
+  "bib": "adversarial/biblatex/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "arXiv ID points to another paper",
+    "b6_eprint_wrong"
+   ],
+   [
+    "FAIL",
+    "DOI points to another work",
+    "b4_dataset_wrong_title"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "b2_journaltitle_corr"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "b1_online"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "b3_software"
+   ],
+   [
+    "CHECK",
+    "",
+    "b3_software"
+   ],
+   [
+    "FAIL",
+    "",
+    "b5_thesis"
+   ],
+   [
+    "CHECK",
+    "",
+    "b5_thesis"
+   ],
+   [
+    "FAIL",
+    "",
+    "b1_online"
+   ],
+   [
+    "FAIL",
+    "",
+    "b2_journaltitle_corr"
+   ]
+  ]
+ },
+ "corporate-datasets": {
+  "bib": "adversarial/corporate-datasets/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "DOI points to another work",
+    "c4_zenodo_wrong_title"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "c3_zenodo_ok"
+   ],
+   [
+    "CHECK",
+    "",
+    "c3_zenodo_ok"
+   ],
+   [
+    "FAIL",
+    "",
+    "c5_repo_only"
+   ],
+   [
+    "CHECK",
+    "",
+    "c5_repo_only"
+   ],
+   [
+    "FAIL",
+    "",
+    "c1_openai"
+   ],
+   [
+    "FAIL",
+    "",
+    "c2_gemini_team"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "c1_openai"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "c2_gemini_team"
+   ]
+  ]
+ },
+ "doi-forms": {
+  "bib": "adversarial/doi-forms/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "DOI does not resolve",
+    "d8_nonexistent"
+   ],
+   [
+    "FAIL",
+    "DOI points to another work",
+    "d7_doi_only_in_url"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "d1_mixed_case"
+   ],
+   [
+    "CHECK",
+    "",
+    "d1_mixed_case"
+   ],
+   [
+    "FAIL",
+    "",
+    "d2_https_prefix"
+   ],
+   [
+    "CHECK",
+    "",
+    "d2_https_prefix"
+   ],
+   [
+    "FAIL",
+    "",
+    "d3_dx_prefix"
+   ],
+   [
+    "CHECK",
+    "",
+    "d3_dx_prefix"
+   ],
+   [
+    "FAIL",
+    "",
+    "d4_doi_colon_prefix"
+   ],
+   [
+    "CHECK",
+    "",
+    "d4_doi_colon_prefix"
+   ],
+   [
+    "FAIL",
+    "",
+    "d6_lower_case"
+   ],
+   [
+    "CHECK",
+    "",
+    "d6_lower_case"
+   ],
+   [
+    "FAIL",
+    "",
+    "d9_escaped_underscore"
+   ],
+   [
+    "CHECK",
+    "",
+    "d9_escaped_underscore"
+   ],
+   [
+    "FAIL",
+    "",
+    "d10_acl_anthology"
+   ],
+   [
+    "CHECK",
+    "",
+    "d10_acl_anthology"
+   ]
+  ]
+ },
+ "duplicates": {
+  "bib": "adversarial/duplicates/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "arXiv ID points to another paper",
+    "u2_bert_again"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "u1_bert"
+   ],
+   [
+    "CHECK",
+    "repeated BibTeX key",
+    "u3_same_key"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "u1_bert"
+   ],
+   [
+    "FAIL",
+    "",
+    "u3_same_key"
+   ]
+  ]
+ },
+ "names-accents": {
+  "bib": "adversarial/names-accents/refs.bib",
+  "must": [
+   [
+    "CHECK",
+    "title differs from the DOI record",
+    "n2_translated_title"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "n1_german_escaped"
+   ],
+   [
+    "FAIL",
+    "",
+    "n2_translated_title"
+   ],
+   [
+    "FAIL",
+    "",
+    "n3_braces_colon"
+   ],
+   [
+    "FAIL",
+    "",
+    "n4_protected_letter"
+   ],
+   [
+    "FAIL",
+    "",
+    "n5_math_in_title"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "n1_german_escaped"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "n3_braces_colon"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "n4_protected_letter"
+   ],
+   [
+    "CHECK",
+    "title differs",
+    "n5_math_in_title"
+   ]
+  ]
+ },
+ "preprint-title": {
+  "bib": "adversarial/preprint-title/refs.bib",
+  "must": [
+   [
+    "CHECK",
+    "published version exists",
+    "p2_same_title_published"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "p3_bert_arxiv"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "p5_published_cited_correctly"
+   ],
+   [
+    "CHECK",
+    "",
+    "p5_published_cited_correctly"
+   ],
+   [
+    "FAIL",
+    "",
+    "p1_title_changed_when_published"
+   ],
+   [
+    "FAIL",
+    "",
+    "p2_same_title_published"
+   ],
+   [
+    "FAIL",
+    "",
+    "p3_bert_arxiv"
+   ],
+   [
+    "FAIL",
+    "",
+    "p4_never_published"
+   ]
+  ]
+ },
+ "refchecker-small": {
+  "bib": "adversarial/refchecker-small/refs.bib",
+  "must": [],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    ""
+   ],
+   [
+    "CHECK",
+    "title differs",
+    ""
+   ],
+   [
+    "CHECK",
+    "DOI",
+    ""
+   ]
+  ]
+ },
+ "reports-books": {
+  "bib": "adversarial/reports-books/refs.bib",
+  "must": [],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    ""
+   ],
+   [
+    "CHECK",
+    "",
+    ""
+   ]
+  ]
+ },
+ "strings-crossref": {
+  "bib": "adversarial/strings-crossref/refs.bib",
+  "must": [],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    ""
+   ],
+   [
+    "CHECK",
+    "",
+    ""
+   ]
+  ]
+ },
+ "subtitles": {
+  "bib": "adversarial/subtitles/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "DOI points to another work",
+    "s5_chapter_doi_book_title"
+   ],
+   [
+    "CHECK",
+    "title differs from the DOI record",
+    "s3_two_word_subset"
+   ],
+   [
+    "CHECK",
+    "title differs from the DOI record",
+    "s4_overlap_only"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "s1_subtitle_dropped"
+   ],
+   [
+    "CHECK",
+    "",
+    "s1_subtitle_dropped"
+   ],
+   [
+    "FAIL",
+    "",
+    "s2_subtitle_added"
+   ],
+   [
+    "CHECK",
+    "",
+    "s2_subtitle_added"
+   ]
+  ]
+ },
+ "edge-cases": {
+  "bib": "edge-cases/refs.bib",
+  "must": [
+   [
+    "CHECK",
+    "published version exists",
+    "Adv.Theor.Math.Phys"
+   ],
+   [
+    "FAIL",
+    "arXiv ID is malformed",
+    "e2_malformed_id"
+   ],
+   [
+    "CHECK",
+    "crossref target not found",
+    "e5_missing_crossref"
+   ],
+   [
+    "CHECK",
+    "title differs from the arXiv record",
+    "e8_old_arxiv_title"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "e3_old_style_subject_class"
+   ],
+   [
+    "CHECK",
+    "",
+    "e3_old_style_subject_class"
+   ],
+   [
+    "FAIL",
+    "",
+    "e4_dx_doi_howpublished"
+   ],
+   [
+    "CHECK",
+    "",
+    "e4_dx_doi_howpublished"
+   ],
+   [
+    "FAIL",
+    "",
+    "e6_hdl_eprint"
+   ],
+   [
+    "CHECK",
+    "",
+    "e6_hdl_eprint"
+   ],
+   [
+    "FAIL",
+    "",
+    "e7_macro_concat"
+   ],
+   [
+    "CHECK",
+    "",
+    "e7_macro_concat"
+   ]
+  ]
+ },
+ "r4": {
+  "bib": "adversarial/r4/refs.bib",
+  "must": [
+   [
+    "FAIL",
+    "arXiv ID points to another paper",
+    "q2_"
+   ],
+   [
+    "FAIL",
+    "DOI points to another work",
+    "q14_"
+   ],
+   [
+    "FAIL",
+    "DOI points to another work",
+    "q12_"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "q1_"
+   ],
+   [
+    "CHECK",
+    "published version exists",
+    "q13_"
+   ]
+  ],
+  "must_not": [
+   [
+    "FAIL",
+    "",
+    "q3_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q4_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q5_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q6_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q7_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q8_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q9_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q10_"
+   ],
+   [
+    "FAIL",
+    "",
+    "q11_"
+   ]
+  ]
+ }
+}

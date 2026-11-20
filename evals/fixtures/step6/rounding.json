@@ -1,0 +1,10 @@
+[
+ {"question": "Is the WombatIndex throughput on the Burrow set 87.4 or 87.5 when computed from unrounded data?", "rounding": true},
+ {"question": "Is the QuokkaScan factor on Numbat-v2 12.6× or 12.7× when computed from unrounded data?", "rounding": true},
+ {"question": "Is the compression ratio at b ∈ {2,4} at most 3.1× (unrounded times) or 3.2× (Table 4)?", "rounding": true},
+ {"question": "Is 1.10 a rounding of an unrounded value?", "item": "1200/1100 = 1.09, not 1.10.", "rounding": true},
+ {"question": "Is the in-memory speedup range 1.15–1.60× (appendix) or 1.25–1.60× (Section 4, n ≥ 64)?", "rounding": false},
+ {"question": "Table 3 says 41.2, the text says 41.3: which is right?", "rounding": false},
+ {"question": "Recompute 1.10 from the unrounded data?", "rounding": false},
+ {"question": "Is the saving 2.3× or 2.5× after rounding?", "rounding": false}
+]

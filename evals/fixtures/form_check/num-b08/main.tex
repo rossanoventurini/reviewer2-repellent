@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{booktabs,multirow}
+\begin{document}
+\section{Results}
+\begin{table}[h]\centering\caption{Labels with citations and a multirow dataset column.}\label{tab:a}
+\begin{tabular}{llrrr}
+\toprule
+Dataset & Method & R@10 & R@100 & QPS \\
+\midrule
+\multirow{3}{*}{MS MARCO} & SPLADE~\cite{formal2021} & 70.1 & 90.2 & 1,000 \\
+ & GPT-4 reranker & 72.0 & 91.0 & 500 \\
+ & Ours & 75.0 & 93.0 & 1,500 \\
+\midrule
+\multirow{2}{*}{NQ} & SPLADE~\cite{formal2021} & 60.0 & 85.0 & 1,200 \\
+ & Ours & 65.0 & 88.0 & 1,700 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{NQ again. SPLADE R@10 here is 61.0 (real inconsistency with 60.0 above).}\label{tab:b}
+\begin{tabular}{lrrr}
+\toprule
+Method & R@10 & R@100 & QPS \\
+\midrule
+SPLADE~\cite{formal2021} & 61.0 & 85.0 & 1,200 \\
+Ours & 65.0 & 88.0 & 1,700 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{thebibliography}{1}
+\bibitem{formal2021} T. Formal et al. SPLADE. 2021.
+\end{thebibliography}
+\end{document}

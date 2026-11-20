@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\section{Results}
+Removing the regulariser changes the score by $-3.2$ points and the drift by $-1.2$ (Table~\ref{tab:a}).
+\begin{table}[h]\centering\caption{Deltas (points). Bold: largest gain.}\label{tab:a}
+\begin{tabular}{lrrrr}
+\toprule
+Variant & $\Delta$ T1 & $\Delta$ T2 & $\Delta$ T3 & Avg \\
+\midrule
+w/o reg & $-$3.2 & -1.2 & $-2.0$ & $-$2.1 \\
+w/o aug & \textbf{1.5} & 0.5 & 1.0 & 1.0 \\
+w/o both & \textbf{$-$5.0} & -4.0 & -3.0 & -4.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\begin{table}[h]\centering\caption{The same deltas, sign dropped by mistake on the first row.}\label{tab:b}
+\begin{tabular}{lrrrr}
+\toprule
+Variant & $\Delta$ T1 & $\Delta$ T2 & $\Delta$ T3 & Avg \\
+\midrule
+w/o reg & 3.2 & 1.2 & 2.0 & 2.1 \\
+w/o aug & 1.5 & 0.5 & 1.0 & 1.0 \\
+w/o both & $-$5.0 & -4.0 & -3.0 & -4.0 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

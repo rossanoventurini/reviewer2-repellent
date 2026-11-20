@@ -1,0 +1,16 @@
+\documentclass{article}\usepackage{booktabs}
+\begin{document}
+\section{Results}
+Ours is consistently faster than every baseline (Table~\ref{tab:a}).
+\begin{table}[h]\centering\caption{Quality and speed.}\label{tab:a}
+\begin{tabular}{lrrr}
+\toprule
+Method & nDCG@10 & R@100 & QPS \\
+\midrule
+Base & \textbf{72.0} & 90.0 & 1,000 \\
+Other & 70.0 & \textbf{91.0} & 1,200 \\
+Ours & 71.0 & 90.5 & \textbf{2,000} \\
+Ours (w/o pruning) & 71.5 & 90.7 & 1,100 \\
+\bottomrule
+\end{tabular}\end{table}
+\end{document}

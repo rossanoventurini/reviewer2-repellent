@@ -1,0 +1,19 @@
+{
+ "default_item": 30,
+ "default": {"wombat2020": 31, "numbat2018": 33},
+ "rules": {"wombat2020": [["doi", 32]], "numbat2018": [["2017|2018", 34]]},
+ "case_item": 35,
+ "items": {"numbat2018": [33, 34, 35, 36]},
+ "new": {"burrow2024": 37},
+ "removed": {"quokka2019dup": {"item": 38, "after": "quokka2019", "why": "duplicate, merged into"}},
+ "notes": {
+  "31": "Booktitle written out in full with the edition and acronym.",
+  "32": "DOI 10.9999/wombat_2020.1 added (invented record_id 42).",
+  "33": "Title case as in the report_v2 listing.",
+  "34": "Year 2017 -> 2018 & URL updated: 100% of the PDF #2 matches.",
+  "35": "Capitalisation follows the publisher.",
+  "36": "Checked against the invented catalogue; nothing else changes.",
+  "37": "Cited in Section 2 but missing from the bibliography.",
+  "38": "Duplicate of quokka2019: merged."
+ }
+}

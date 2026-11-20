@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{hyperref,fancyhdr,url}
+\hypersetup{pdfauthor={Anonymous}}
+\pagestyle{fancy}\lhead{Doe and Roe}
+\title{A Paper}
+\author{Anonymous\thanks{Supported by grant 123456 of the Example Foundation.}}
+\begin{document}
+\maketitle
+In our previous work~\cite{doe2020} we proposed Foo; our library Foo~\cite{doe2020} is public.
+Code: \url{https://github.com/janedoe/foo} (ours), \url{https://github.com/acme-lab/foo} (our lab's org),
+\url{https://github.com/facebookresearch/faiss} (third party), \url{https://anonymous.4open.science/r/foo-1234} (anonymised).
+We thank Jane Doe for the data.
+\section*{Acknowledgements}
+Funded by the Example Foundation.
+\begin{thebibliography}{1}
+\bibitem{doe2020} J. Doe and J. Roe. Foo. In Proc. X, 2020.
+\end{thebibliography}
+\appendix
+\section{Contact}
+Questions to jane@doe.org (Jane Doe, University of Example).
+\end{document}

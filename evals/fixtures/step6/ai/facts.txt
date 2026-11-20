@@ -1,0 +1,16 @@
+## refs_check
+CHECK | not found in the reference databases | quokka2019 | "unverified: Paper not found by any checker" | look the title up on the web; report it only if no such work exists or its authors differ
+INFO | references checked | "3 cited entries from references.bib; 0 arXiv IDs, 1 DOIs"
+SUMMARY | FAIL 0 | CHECK 1 | INFO 1
+
+## form_check
+FAIL | chatbot leftover | sections/intro.tex:9 | p.1 | "Certainly, here is a revised version of the paragraph"
+FAIL | Markdown in the text | sections/intro.tex:4 | "Many system solve **wombat search** quickly." | **bold** prints with the asterisks; use \textbf{...}
+CHECK | comment mentions an LLM or a prompt | main.tex:6 | "%asked ChatGPT to shorten this" | names an LLM tool (chatgpt): public if the source is posted; strip the comments before arXiv
+CHECK | Unicode character in the text | sections/results.tex:4 | "the — dash" | em dash — on 1 line(s): prints, but differs from the LaTeX input; LaTeX: ---
+INFO | length | "2 pages in all; references start on page 2"
+INFO | source hygiene checks | "engine pdflatex; Markdown 1, Unicode 1, invisible characters 0, special spaces 0, LLM/prompt comments 1" | text from \begin{document}, outside math, verbatim and comments
+SUMMARY | FAIL 2 | CHECK 2 | INFO 2
+
+## bib_style
+INFO | bibliography style | 3 cited entries from references.bib

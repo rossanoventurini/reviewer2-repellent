@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use reviewer2-repellent in your work, please cite it as below."
+title: "reviewer2-repellent: an agent skill that checks a LaTeX paper for objective errors before submission"
+type: software
+authors:
+  - family-names: Venturini
+    given-names: Rossano
+    affiliation: University of Pisa
+    email: rossano.venturini@gmail.com
+version: 0.1.0
+date-released: 2026-11-11
+license: MIT
+repository-code: "https://github.com/rossanoventurini/reviewer2-repellent"
+url: "https://github.com/rossanoventurini/reviewer2-repellent"
+keywords:
+  - LaTeX
+  - proofreading
+  - peer review
+  - agent skills
+  - bibliography
